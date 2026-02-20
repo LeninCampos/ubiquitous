@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repositorio Académico | Lenin Campos</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-terminal"></i> LeninCampos
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#inicio" class="active">/home</a></li>
+            <li class="dropdown">
+                <a href="#parciales">/parciales <i class="fas fa-chevron-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="parcial1/index.html">Parcial 1</a>
+                    <a href="parcial2/index.html">Parcial 2</a>
+                    <a href="parcial3/index.html">Parcial 3</a>
+                </div>
+            </li>
+            <li><a href="#proyecto">/proyecto</a></li>
+            <li><a href="#hobbies">/hobbies</a></li>
+        </ul>
+        <div class="burger" onclick="toggleMenu()">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <header id="inicio" class="tech-header">
+        <div class="header-content">
+            <span class="cmd-text">user@server:~$ ./iniciar_portafolio.sh</span>
+            <h1>Bases de Datos Avanzadas</h1>
+            <p>Bitácora de ejercicios guiados.</p>
+            <div class="status-badge">
+                <span class="status-dot"></span> System Online
+            </div>
+        </div>
+    </header>
+
+    <section id="parciales" class="main-container">
+        <h2 class="section-title"> > Módulos Académicos</h2>
+        
+        <div class="grid-parciales">
+            <article class="card-parcial">
+                <div class="card-icon"><i class="fas fa-code-branch"></i></div>
+                <h3>Parcial 1</h3>
+                
+                <ul class="file-list">
+                    <li><i class="far fa-file-code"></i> <a href="parcial1/semana1/sesion2.html">Semana 1: Introduccion</a></li>
+                    <li><i class="far fa-file-code"></i> <a href="parcial1/semana2/sesion1.html">Semana 2: Ubiquitous</a></li>
+                </ul>
+                <a href="parcial1/index.html" class="btn-card">Explorar Directorio</a>
+            </article>
+
+            <article class="card-parcial">
+                <div class="card-icon"><i class="fas fa-network-wired"></i></div>
+                <h3>Parcial 2</h3>
+                
+                <ul class="file-list">
+                    <li><i class="far fa-file-code"></i> <a href="#">Semana 5:</a></li>
+                    <li><i class="far fa-file-code"></i> <a href="#">Semana 6:</a></li>
+                </ul>
+                <a href="parcial2/index.html" class="btn-card">Explorar Directorio</a>
+            </article>
+
+            <article class="card-parcial">
+                <div class="card-icon"><i class="fas fa-server"></i></div>
+                <h3>Parcial 3</h3>
+                
+                <ul class="file-list">
+                    <li><i class="far fa-file-code"></i> <a href="#">Semana 10:</a></li>
+                    <li><i class="far fa-file-code"></i> <a href="#">Semana 11:</a></li>
+                </ul>
+                <a href="parcial3/index.html" class="btn-card">Explorar Directorio</a>
+            </article>
+        </div>
+    </section>
+
+    <section id="proyecto" class="section-dark">
+        <div class="main-container">
+            <h2 class="section-title"> > Proyecto Integrador</h2>
+            <div class="project-layout">
+                <div class="project-info">
+                    <h3>Sistema de Gestión Distribuido</h3>
+                    <p>Implementación final que integra sockets, manejo de archivos y concurrencia.</p>
+                    <div class="tech-stack">
+                        <span>C++</span> <span>Linux</span> <span>Bash</span> <span>Git</span>
+                    </div>
+                    <br>
+                    <a href="proyecto/index.html" class="btn-main">Ver Documentación <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="project-visual">
+                    <div class="terminal-window">
+                        <div class="terminal-header">
+                            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                        </div>
+                        <div class="terminal-body">
+                            <p class="code">> compiling main.c...</p>
+                            <p class="code">> linking libraries...</p>
+                            <p class="code success">> Build successful. (2.4s)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="hobbies" class="main-container">
+        <h2 class="section-title"> > /var/log/hobbies</h2>
+        <p class="text-center">Intereses fuera de la terminal.</p>
+        <div class="hobbies-grid">
+            <div class="hobby-item">
+                <i class="fas fa-gamepad"></i>
+                <h4>Gaming</h4>
+            </div>
+            <div class="hobby-item">
+                <i class="fas fa-music"></i>
+                <h4>Música</h4>
+            </div>
+            <div class="hobby-item">
+                <i class="fas fa-camera"></i>
+                <h4>Fotografía</h4>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Lenin Campos | Bases de Datos Avanzadas 2026</p>
+        <p class="tiny-text">Running on Ubiquitous</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Sesión 1 | Lenin Campos</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../../index.html"><i class="fas fa-terminal"></i> LeninCampos</a>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="../../index.html">/home</a></li>
+            <li><a href="../index.html">../volver_al_parcial</a></li>
+        </ul>
+        <div class="burger" onclick="toggleMenu()">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <header class="report-header">
+        <div class="header-content">
+            <div class="meta-tags">
+                <span class="tag">Parcial 1</span>
+                <span class="tag">Semana 1</span>
+                <span class="tag">Sesión 2</span>
+            </div>
+            <h1>Título del Ejercicio (Ej: Configuración SSH)</h1>
+            <p class="subtitle">Fecha: 24 de Enero, 2026</p>
+        </div>
+    </header>
+
+    <main class="report-container">
+        
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-bullseye"></i> 1. Objetivo y Contexto</h2>
+            <div class="content-box">
+                <p><strong>Objetivo:</strong> Describir aquí qué se busca lograr con este ejercicio (Ej: Establecer una conexión segura mediante llaves RSA...).</p>
+                <p><strong>Contexto:</strong> Explicar prerrequisitos o situación inicial.</p>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-book"></i> 2. Conceptos y Profundización</h2>
+            <div class="content-box">
+                <p>Aquí explicas la teoría. NO solo copies y pegues.</p>
+                <ul>
+                    <li><strong>Concepto A:</strong> Explicación...</li>
+                    <li><strong>Limitaciones/Alternativas:</strong> (Punto clave de la rúbrica: menciona qué pasaría si usaras otra tecnología).</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-code"></i> 3. Desarrollo y Código</h2>
+            <div class="content-box">
+                <p>Explicación de la lógica del script:</p>
+                
+                <div class="code-window">
+                    <div class="window-header">
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                        <span class="filename">main.c</span>
+                    </div>
+                    <pre><code class="language-c">
+#include <stdio.h>
+
+int main() {
+    printf("Hola Mundo desde el servidor Ubuntu!\n");
+    return 0;
+}
+                    </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-desktop"></i> 4. Evidencia de Ejecución</h2>
+            <div class="content-box">
+                <p>Captura de pantalla mostrando la compilación y ejecución:</p>
+                
+                <figure class="screenshot-container">
+                    <img src="img/evidencia1.png" alt="Screenshot de la terminal">
+                    <figcaption>Fig 1. Ejecución del comando gcc y salida exitosa.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-box-open"></i> 5. Entregables</h2>
+            <div class="download-card">
+                <div class="download-info">
+                    <h3><i class="fas fa-file-archive"></i> Paquete de Código</h3>
+                    <p>Incluye código fuente, Makefile y README con instrucciones.</p>
+                </div>
+                <a href="files/ejercicio1.zip" class="btn-download" download>
+                    <i class="fas fa-download"></i> Descargar ZIP
+                </a>
+            </div>
+            <div class="readme-preview">
+                <h4>Instrucciones rápidas:</h4>
+                <pre class="cmd-preview">
+$ tar -xvf ejercicio1.tar.gz
+$ cd ejercicio1
+$ make
+$ ./programa
+                </pre>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-lightbulb"></i> 6. Conclusiones</h2>
+            <div class="content-box">
+                <p><strong>Aprendizaje:</strong> ¿Qué aprendiste?</p>
+                <p><strong>Problemas y Soluciones:</strong> "Tuve un error con el puerto 22, lo solucioné configurando ufw..." (Esto demuestra autenticidad).</p>
+                <p><strong>Mejoras Futuras:</strong> ¿Qué le agregarías si tuvieras más tiempo?</p>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-quote-right"></i> 7. Referencias</h2>
+            <div class="content-box">
+                <ul class="references-list">
+                    <li>[1] Tanenbaum, A. S. (2015). <em>Modern Operating Systems</em>. Pearson.</li>
+                    <li>[2] OpenSSH. (2024). <em>Manual de SSH</em>. Recuperado de openssh.com</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Lenin Campos | Bases de Datos Avanzadas</p>
+    </footer>
+
+    <script src="../../script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+</html>

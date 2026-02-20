@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Sesión 2 | Lenin Campos</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../../index.html"><i class="fas fa-terminal"></i> LeninCampos</a>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="../../index.html">/home</a></li>
+            <li><a href="../index.html">../volver_al_parcial</a></li>
+        </ul>
+        <div class="burger" onclick="toggleMenu()">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <header class="report-header">
+        <div class="header-content">
+            <div class="meta-tags">
+                <span class="tag">Parcial 1</span>
+                <span class="tag">Semana 2</span>
+                <span class="tag">Sesión 2</span>
+            </div>
+            <h1>DBMS en máquina virtual de Google Cloud</h1>
+            <p class="subtitle">Fecha: 23 de Enero, 2026</p>
+        </div>
+    </header>
+
+    <main class="report-container">
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-bullseye"></i> 1. Objetivo y Contexto</h2>
+            <div class="content-box">
+                <p><strong>Objetivo:</strong> Configurar el DBMS para empezar a usarlo, crear nuevos usuarios desde el
+                    administrador y verificar cómo funciona la asignación de los diferentes permisos en la BD.</p>
+                <p><strong>Contexto:</strong> En nuestra máquina virtual previamente teníamos instalado MariaDB,
+                    configurado para el arranque automático al iniciar la instancia de la VM.</p>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-book"></i> 2. Conceptos y Profundización</h2>
+            <div class="content-box">
+                <p>Dentro del servidor, con el superusuario configuramos el perfil de administrador del DBMS. Una vez
+                    configurado, accedimos como administradores, creamos una base de datos y un usuario con los permisos
+                    para alterar dicha base de datos (usando principalmente DDL) y finalmente realizamos un backup de la
+                    misma.</p>
+                <ul>
+                    <li><strong>DDL:</strong> Comandos de SQL utilizados para definir, modificar y gestionar la
+                        estructura de los objetos en una base de datos.</li>
+                    <li><strong>root:</strong> El usuario root del servidor Linux tiene la facultad para ejecutar
+                        comandos en el sistema operativo, mientras que el root del DBMS tiene la facultad de gestionar
+                        todo dentro del gestor de base de datos.</li>
+                    <li><strong>DBMS:</strong> Database management system*(sistema gestor de bases de datos).</li>
+                    <li><strong>Limitaciones:</strong> Para este ejercicio guiado, la mayor limitante viene de la poca
+                        familiarización con el ambiente de Linux.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-desktop"></i> 3. Evidencia de Ejecución</h2>
+            <div class="content-box">
+                <p>Captura de pantalla mostrando la compilación y ejecución:</p>
+
+                <figure class="screenshot-container">
+                    <img src="img/21.png" alt="Screenshot de la terminal">
+                    <figcaption>Fig 1. Ingresando al DBMS como administrador.</figcaption>
+                </figure>
+                <figure class="screenshot-container">
+                    <img src="img/22.png" alt="Screenshot de la terminal">
+                    <figcaption>Fig 2. Manipulando la BD como el usuario que creamos.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-box-open"></i> 4. Entregables</h2>
+            <div class="download-card">
+                <div class="download-info">
+                    <h3><i class="fas fa-file-archive"></i> Paquete de Código</h3>
+                    <p>Incluye README con instrucciones.</p>
+                </div>
+                <a href="files/viernes.zip" class="btn-download" download>
+                    <i class="fas fa-download"></i> Descargar ZIP
+                </a>
+            </div>
+            <div class="readme-preview">
+                <h4>Instrucciones rápidas:</h4>
+                <pre class="cmd-preview">
+$ sudo mariadb_secure_installation
+$ su - lenin-campos
+$ mysql -u root -p
+$ CREATE DATABASE  Biblioteca;
+$ GRANT ALL PRIVILEGES ON Biblioteca.* -> To biblio_user@localhost IDENTIFIED BY '666';
+$ mysql -u biblio_user -p
+$ mysqldump -u biblio_user -p Biblioteca > respaldo_biblioteca.sql
+$ more respaldo_biblioteca.sql
+                </pre>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-lightbulb"></i> 5. Conclusiones</h2>
+            <div class="content-box">
+                <p><strong>Aprendizaje:</strong> Se pueden usar simultáneamente varias terminales para crear usuarios
+                    con permisos diferentes que usen la BD y realizar respaldos.</p>
+                <p><strong>Problemas y Soluciones:</strong> Al comienzo me atrasé con un comando, pero empecé a
+                    comprender lo que estábamos tratando de hacer y llego un punto en que sin necesidad de copiar los
+                    comandos, con saber que teniamos que hacer podia hacerlo.</p>
+                <p><strong>Mejoras Futuras:</strong> Practicar más el uso de la terminal.</p>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-quote-right"></i> 6. Referencias</h2>
+            <div class="content-box">
+                <ul class="references-list">
+                    <li>Clase de Bases de Datos Avanzadas (2026). <em>UDEM</em>.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Lenin Campos | Bases de Datos Avanzadas</p>
+    </footer>
+
+    <script src="../../script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+
+</html>

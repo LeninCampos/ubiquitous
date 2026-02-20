@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Sesión 3 | Lenin Campos</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../../index.html"><i class="fas fa-terminal"></i> LeninCampos</a>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="../../index.html">/home</a></li>
+            <li><a href="../index.html">../volver_al_parcial</a></li>
+        </ul>
+        <div class="burger" onclick="toggleMenu()">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <header class="report-header">
+        <div class="header-content">
+            <div class="meta-tags">
+                <span class="tag">Parcial 1</span>
+                <span class="tag">Semana 3</span>
+                <span class="tag">Sesión 1</span>
+            </div>
+            <h1>Descarga de archivos desde internet y editores de texto en terminal</h1>
+            <p class="subtitle">Fecha: 3 de Febrero, 2026</p>
+        </div>
+    </header>
+
+    <main class="report-container">
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-bullseye"></i> 1. Objetivo y Contexto</h2>
+            <div class="content-box">
+                <p><strong>Objetivo:</strong> Importar y manipular archivos sql en los dos diferentes DBMS que estamos,
+                    viendo las diferencias e implicaciones de cada uno, así como ejecutar un editor de texto en la
+                    terminal como vendría a ser VI, para manipular los archivos desde la terminal, sin necesidad de
+                    manipularlo de manera externa.</p>
+                <p><strong>Contexto:</strong> Descargamos la herramienta wget para poder descargar desde internet un
+                    archivo sql para manipular con los diferentes DBMS.</p>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-book"></i> 2. Conceptos y Profundización</h2>
+            <div class="content-box">
+                <ul>
+                    <li><strong>wget: </strong>
+                        Herramienta de línea de comandos del proyecto GNU, libre y no interactivo, diseñada para
+                        descargar contenido de servidores web de forma robusta utilizando HTTP, HTTPS y FTP. (GNU
+                        Project, 2024)
+                    </li>
+                    <li><strong>VI: </strong>
+                        Es un editor de texto de pantalla completa, clásico y predeterminado en la mayoría de los
+                        sistemas UNIX/Linux, esencial para la administración de sistemas y emergencias por sus mínimos
+                        requisitos de recursos.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-desktop"></i> 3. Evidencia de Ejecución</h2>
+            <div class="content-box">
+                <p>Captura de pantalla mostrando la compilación y ejecución:</p>
+
+                <figure class="screenshot-container">
+                    <img src="img/11.png" alt="Screenshot de la terminal en Ubiquitous">
+                    <figcaption>Fig 1. Mensaje de la terminal para mi.</figcaption>
+                </figure>
+                <figure class="screenshot-container">
+                    <img src="img/12.png" alt="Screenshot de la terminal en Ubiquitous">
+                    <figcaption>Fig 2. Instalación de dependencias para poder descargar cosas desde internet de forma
+                        eficiente.</figcaption>
+                </figure>
+                <figure class="screenshot-container">
+                    <img src="img/13.png" alt="Screenshot de la terminal en Ubiquitous">
+                    <figcaption>Fig 3. Descargamos la base de datos que nos dio el profe y lo importamos a nuestro
+                        mysql.</figcaption>
+                </figure>
+                <figure class="screenshot-container">
+                    <img src="img/14.png" alt="Screenshot de la terminal en Ubiquitous">
+                    <figcaption>Fig 4. Importamos la base de datos ahora a nuestro POSTGRES.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-box-open"></i> 4. Entregables</h2>
+            <div class="readme-preview">
+                <h4>Instrucciones rápidas:</h4>
+                <pre class="cmd-preview">
+&sudo dnf install wget -y 
+& wget https://ubiquitous.udem.edu/~raulms/content/SC3303/Biblioteca.sql
+& ls -l
+&mysqldump --user=biblio_user --password Biblioteca < Biblioteca.sql
+
+//Dumpear el esquema
+&mysqldump --user=biblio_user --password --no-data Biblioteca > Respaldo-Biblioteca.sql
+
+//Solo datos
+&mysqldump --user=biblio_user --password --no-create-info Biblioteca > Biblioteca-datos.sql
+
+//Respaldo del DBMS
+&mysqldump --user=root --pasword --all-databases > TodasLasbases.sql
+
+//Restaurar un BD
+&-u usuario -p
+&mysql --user=usuario --pasword MiBase < EsquemaMiDB.sql
+
+//POSTGRES
+//Toda la BD
+&pg_dumpall -U usuario -f /archivo.sql
+&pg_dumpall -U usuario 01 -d MiDB.sql -f RespaldoMiDB.sql
+
+//SOLO DATOS
+&pg_dumpall -U usuario01 --data-only MiDB > RespaldoDatos.sql
+
+//Solo esquema
+&pg_dumpall -U usuaio01 --schema-only MiDB > EsquemaMiDB.sql
+
+//Restaurar
+&psql -U postgres -f /ruta_absoluta/archivo.sql
+&psql -U usuario -d /MiDB -f /ruta_absoluta/archivo.sql
+&pg_dumpall -f respaldo.sql
+
+        </pre>
+            </div>
+            <div class="readme-preview">
+                <h4>Ejercicios:</h4>
+                <pre class="cmd-preview">
+//Crea un query que muestre una lista de prestamos pendientes, 
+//tomando en consideración que la fecha de devolución es NULL
+SELECT * 
+FROM prestamos 
+WHERE fecha_devolucion IS NULL;
+
+//Muestra la cantidad de libros prestados por cada alumno
+SELECT a.matricula, a.nombre, COUNT(p.id_prestamo) AS n_prestamos
+FROM  alumnos a 
+JOIN prestamos p ON a.matricula = p.matricula
+GROUP BY a.matricula; 
+
+//Muestra los libros prestados durante el mes de agosto del 2024
+SELECT l.titulo
+FROM libros l JOIN prestamos p ON l.id_libro = p.id_libro
+WHERE p.fecha_prestamo BETWEEN '2024-08-01' AND '2024-08-31';
+
+//Muestra los alumnos que hayan prestado algún libro de "Gabriel Garcia Márquez"
+SELECT DISTINCT a.matricula, a.nombre
+FROM libros l JOIN prestamos p ON l.id_libro = p.id_libro JOIN alumnos a ON a.matricula = p.matricula
+WHERE l.autor = 'Gabriel García Márquez';
+
+
+//Muestra el listado de libros que nunca hayan sido prestados
+SELECT DISTINCT *
+FROM libros l
+WHERE l.id_libro NOT IN(
+	SELECT l.id_libro 
+	FROM libros l JOIN prestamos p 
+	ON l.id_libro = p.id_libro);
+
+
+                </pre>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-lightbulb"></i> 5. Conclusiones</h2>
+            <div class="content-box">
+                <p><strong>Aprendizaje:</strong> Usar un editor de texto en la terminal para modificar archivos desde la
+                    misma terminal para hacer procesos más rápidos, y a dumpear e importar archivos sql en POSTGRES y
+                    MariaDB, y las restricciones de cada una de estas.</p>
+                <p><strong>Problemas y Soluciones:</strong> El tema de las minúsculas y mayúsculas que es diferente, y
+                    con el mismo vi se pudo solucionar rápidamente eso.</p>
+                <p><strong>Mejoras Futuras:</strong> Practicar los comandos de Linux.</p>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-quote-right"></i> 6. Referencias</h2>
+            <div class="content-box">
+                <ul class="references-list">
+                    <li>Clase de Bases de Datos Avanzadas (2026). <em>UDEM</em>.</li>
+                    <li>GNU Project. (2024). Wget manual. Recuperado el 5 de febrero de 2026, de
+                        <em>from https://www.gnu.org/software/wget/manual/wget.html</em>.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Lenin Campos | Bases de Datos Avanzadas</p>
+    </footer>
+
+    <script src="../../script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+
+</html>

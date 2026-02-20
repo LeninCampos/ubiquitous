@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Sesión 1 | Lenin Campos</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../../index.html"><i class="fas fa-terminal"></i> LeninCampos</a>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="../../index.html">/home</a></li>
+            <li><a href="../index.html">../volver_al_parcial</a></li>
+        </ul>
+        <div class="burger" onclick="toggleMenu()">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <header class="report-header">
+        <div class="header-content">
+            <div class="meta-tags">
+                <span class="tag">Parcial 1</span>
+                <span class="tag">Semana 2</span>
+                <span class="tag">Sesión 1</span>
+            </div>
+            <h1>Configuración de Ubiquitous y Google Cloud</h1>
+            <p class="subtitle">Fecha: 20 de Enero, 2026</p>
+        </div>
+    </header>
+
+    <main class="report-container">
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-bullseye"></i> 1. Objetivo y Contexto</h2>
+            <div class="content-box">
+                <p><strong>Objetivo:</strong> En este día se vieron dos temas principales: <br>
+                    -Comprender cómo acceder y usar Ubiquitous: utilizar nuestro servidor y crear la página donde estaremos
+                    subiendo nuestras tareas y ejercicios guiados. <br>
+                    -Configurar nuestra primera máquina virtual en Google Cloud: qué implica, las diferentes opciones y
+                    lo que nosotros estaremos usando.</p>
+                <p><strong>Contexto:</strong> <br> -Todos tenemos una cuenta en el servidor de la escuela; ahí es donde
+                    cada quien estará subiendo sus tareas en lugar de Blackboard. <br>
+                    -Previamente dejamos nuestras cuentas escolares de Google Cloud creadas y configurada la
+                    facturación.</p>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-book"></i> 2. Conceptos y Profundización</h2>
+            <div class="content-box">
+                <ul>
+                    <li><strong>Ubiquitous:</strong> El servidor está previamente configurado con SSH para que cada
+                        alumno pueda acceder con su matrícula. Creamos con IA generativa una página web provisional para
+                        levantarla en ese servidor y descargamos CyberDuck para poder subir los archivos con seguridad
+                        mediante el protocolo SFTP, logrando que se vea una página en vez de un índice en blanco.</li>
+                    <li><strong>Google Cloud:</strong> Vimos con especial énfasis las configuraciones de las VM, el
+                        sistema operativo que debíamos instalar (CentOS), revisamos rápidamente algunos comandos e instalamos
+                        MariaDB en el servidor.
+                    </li>
+                    <li><strong>SSH:</strong> Es un protocolo de seguridad de red que permite el acceso y control remoto
+                        de equipos a servidores a través de una conexión cifrada.</li>
+                    <li><strong>VM: </strong>Máquina virtual que sirve para emular el software de una computadora física,
+                        funcionando como un sistema independiente con su propio sistema operativo y recursos.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-desktop"></i> 3. Evidencia de Ejecución</h2>
+            <div class="content-box">
+                <p>Captura de pantalla mostrando la compilación y ejecución:</p>
+
+                <figure class="screenshot-container">
+                    <img src="img/13.png" alt="Screenshot de la terminal en Ubiquitous">
+                    <figcaption>Fig 1. Página en Ubiquitous creada.</figcaption>
+                </figure>
+                <figure class="screenshot-container">
+                    <img src="img/11.png" alt="Screenshot de la terminal">
+                    <figcaption>Fig 2. Instancia de VM creada.</figcaption>
+                </figure>
+                <figure class="screenshot-container">
+                    <img src="img/12.png" alt="Screenshot de la terminal">
+                    <figcaption>Fig 3. MariaDB activo en la VM.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-box-open"></i> 4. Entregables</h2>
+            <div class="download-card">
+                <div class="download-info">
+                    <h3><i class="fas fa-file-archive"></i> Paquete de Código</h3>
+                    <p>Incluye README con instrucciones.</p>
+                </div>
+                <a href="files/martes.zip" class="btn-download" download>
+                    <i class="fas fa-download"></i> Descargar ZIP
+                </a>
+            </div>
+            <div class="readme-preview">
+                <h4>Instrucciones rápidas:</h4>
+                <pre class="cmd-preview">
+// Ubiquitous
+$ ls
+$ mkdir html
+$ cd html
+// Google Cloud
+$ sudo apt install mariadb-server
+$ sudo systemctl enable mariadb
+$ sudo systemctl status mariadb
+                </pre>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-lightbulb"></i> 5. Conclusiones</h2>
+            <div class="content-box">
+                <p><strong>Aprendizaje:</strong> Cómo conectarme a mi servidor de Ubiquitous y modificarlo, y cómo crear nuevas instancias de VM.</p>
+                <p><strong>Problemas y Soluciones:</strong> Cuando creé la máquina virtual la configuré mal y no podía descargar MariaDB; borré esa instancia y creé una nueva bien configurada.</p>
+                <p><strong>Mejoras Futuras:</strong> Practicar los comandos de Linux.</p>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-quote-right"></i> 6. Referencias</h2>
+            <div class="content-box">
+                <ul class="references-list">
+                    <li>Clase de Bases de Datos Avanzadas (2026). <em>UDEM</em>.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Lenin Campos | Bases de Datos Avanzadas</p>
+    </footer>
+
+    <script src="../../script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+
+</html>

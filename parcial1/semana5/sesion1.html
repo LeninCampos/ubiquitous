@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Sesión 3 | Lenin Campos</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../../index.html"><i class="fas fa-terminal"></i> LeninCampos</a>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="../../index.html">/home</a></li>
+            <li><a href="../index.html">../volver_al_parcial</a></li>
+        </ul>
+        <div class="burger" onclick="toggleMenu()">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <header class="report-header">
+        <div class="header-content">
+            <div class="meta-tags">
+                <span class="tag">Parcial 1</span>
+                <span class="tag">Semana 5</span>
+                <span class="tag">Sesión 1</span>
+            </div>
+            <h1>Uso de procedures</h1>
+            <p class="subtitle">Fecha: 10 de Febrero, 2026</p>
+        </div>
+    </header>
+
+    <main class="report-container">
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-bullseye"></i> 1. Objetivo y Contexto</h2>
+            <div class="content-box">
+                <p><strong>Objetivo:</strong> Entender que son los procedures y como funcionan, ver los diferentes tipos y que implica cada uno y como manejarlos.</p>
+                <p><strong>Contexto: </strong>En nuestra previa instancia de google cloud, tenemos descargada MariaDB, con una db 'Biblioteca', con tablas y registros hechos.</p>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-book"></i> 2. Conceptos y Profundización</h2>
+            <div class="content-box">
+                <ul>
+                    <li><strong>Stored Procedures:</strong> Es un programa al que se puede llamar para realizar operaciones. Un procedimiento puede incluir sentencias de lenguaje principal y sentencias SQL. Los procedimientos en SQL proporcionan las mismas ventajas que los procedimientos en un lenguaje principal. IBM(s.f.).</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-desktop"></i> 3. Evidencia de Ejecución</h2>
+            <div class="content-box">
+                <p>Captura de pantalla mostrando la compilación y ejecución:</p>
+
+                <figure class="screenshot-container">
+                    <img src="img/11.png" alt="Screenshot de la terminal en Ubiquitous">
+                    <figcaption>Fig 1. Proceso para imprimir alumnos y matriculas.</figcaption>
+                </figure>
+                <figure class="screenshot-container">
+                    <img src="img/12.png" alt="Screenshot de la terminal en Ubiquitous">
+                    <figcaption>Fig 2. Procesos para crear los correos con los nombres.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-box-open"></i> 4. Entregables</h2>
+            <div class="download-card">
+                <div class="download-info">
+                    <h3><i class="fas fa-file-archive"></i> Paquete de Código</h3>
+                    <p>Incluye README con instrucciones.</p>
+                </div>
+                <a href="files/martes.zip" class="btn-download" download>
+                    <i class="fas fa-download"></i> Descargar ZIP
+                </a>
+            </div>
+            <div class="readme-preview">
+                <h4>Instrucciones rápidas:</h4>
+                <pre class="cmd-preview">
+//uso de stored procedures en mariadb
+
+//1.- Construye un SP que cree una etiqueta simple con el nombre del alumno
+
+DELIMITER // 
+CREATE PROCEDURE etiquetaAlumno()
+BEGIN
+    SELECT CONCAT('Alumno: ', nombre) AS Alumnos
+    FROM Alumnos;
+END // 
+DELIMITER ;
+
+//2.- Construye un sp qeu utilice LA ETIQUETA LLAMADA MATRICULA ´EL NOMBRE DEL ALUMNO
+
+DELIMITER $$ 
+CREATE PROCEDURE matriculaAlumno()
+BEGIN
+SELECT CONCAT(matricula, ' - ', nombre) AS Alumnos
+    FROM Alumnos;
+END $$
+DELIMITER ;
+
+//3.- Construye un SP que utilice una etiqueta llamada matricula + el nombre del alumno en mayusculas.
+
+DELIMITER $$
+CREATE PROCEDURE matriculaAlumnoM()
+BEGIN
+SELECT CONCAT(matricula, '-', UPPER(nombre)) AS Alumnos
+    FROM Alumnos;
+END $$
+DELIMITER ;
+
+
+-- Para llamar al procedimiento se usa CALL
+-- Para ver procedimientos uso SHOW PROCEDURE STATUS WHERE Db='Biblioteca';
+-- BORRAR DROP PROCEDURE nombre();
+
+//4.- Construye un email usando IN 
+
+DELIMITER $$
+CREATE PROCEDURE email_generado(
+    IN dominio VARCHAR(100)
+) 
+BEGIN
+    DECLARE dom VARCHAR(100);
+    SET dom = dominio;
+
+
+    SELECT nombre, 
+        CONCAT(LOWER(REPLACE(nombre, ' ', ',')), '@',dom) AS email
+        FROM Alumnos;
+
+END $$ 
+DELIMITER ;
+                </pre>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-lightbulb"></i> 5. Conclusiones</h2>
+            <div class="content-box">
+                <p><strong>Aprendizaje:</strong> Usar y llamar procesos preestablecidos e usar parametros y variables locales en estos.</p>
+                <p><strong>Problemas y Soluciones:</strong> Al comienzo usar bien los comandos me costo, y es dificil ya que no se pueden editar, se borran y crean de 0, pero me ayudo a entenderlos mejor.</p>
+                <p><strong>Mejoras Futuras:</strong> Practicar el uso de consultas y los diferentes tipos de parametros que hay.</p>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-quote-right"></i> 6. Referencias</h2>
+            <div class="content-box">
+                <ul class="references-list">
+                    <li>Clase de Bases de Datos Avanzadas (2026). <em>UDEM</em>.</li>
+                    <li>IBM. (s. f.). Procedimientos almacenados. IBM Documentation. Recuperado el 14 de febrero de 2026, de <em>https://www.ibm.com/docs/es/i/7.5.0?topic=triggers-stored-procedures</em>.</li>
+                    <li></em>.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Lenin Campos | Bases de Datos Avanzadas</p>
+    </footer>
+
+    <script src="../../script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+
+</html>

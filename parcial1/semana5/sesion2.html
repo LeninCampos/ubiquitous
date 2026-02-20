@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Sesión 2 | Lenin Campos</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../../index.html"><i class="fas fa-terminal"></i> LeninCampos</a>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="../../index.html">/home</a></li>
+            <li><a href="../index.html">../volver_al_parcial</a></li>
+        </ul>
+        <div class="burger" onclick="toggleMenu()">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <header class="report-header">
+        <div class="header-content">
+            <div class="meta-tags">
+                <span class="tag">Parcial 1</span>
+                <span class="tag">Semana 5</span>
+                <span class="tag">Sesión 2</span>
+            </div>
+            <h1>Indices en sql.</h1>
+            <p class="subtitle">Fecha: 13 de Febrero, 2026</p>
+        </div>
+    </header>
+
+    <main class="report-container">
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-bullseye"></i> 1. Objetivo y Contexto</h2>
+            <div class="content-box">
+                <p><strong>Objetivo:</strong> Introducirnos acerca de que son los indices en sql y para que sirven,
+                    cuando es bueno usarlos y cuando no.</p>
+                <p><strong>Contexto:</strong> Trabajaremos con los indices en la base de datos que hemos estado usando
+                    de Biblioteca, ya con registros preecargados.</p>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-book"></i> 2. Conceptos y Profundización</h2>
+            <div class="content-box">
+                <ul>
+                    <li><strong>Indices sql:</strong> Son estructuras de datos que optimizan la velocidad de consulta y
+                        recuperación de información en tablas grandes, evitando búsquedas secuenciales completas.
+                        Funcionan organizando los datos de columnas específicas en estructuras como B-trees, permitiendo
+                        encontrar filas rápidamente.(Castañeda, 2023)</li>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-desktop"></i> 3. Evidencia de Ejecución</h2>
+            <div class="content-box">
+                <p>Captura de pantalla mostrando la compilación y ejecución:</p>
+
+                <figure class="screenshot-container">
+                    <img src="img/21.png" alt="Screenshot de la terminal">
+                    <figcaption>Fig 1. Mostrar el estado de los procesos.</figcaption>
+                </figure>
+                <figure class="screenshot-container">
+                    <img src="img/22.png" alt="Screenshot de la terminal">
+                    <figcaption>Fig 2. Creaacion de indice.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-box-open"></i> 4. Entregables</h2>
+            <div class="download-card">
+                <div class="download-info">
+                    <h3><i class="fas fa-file-archive"></i> Paquete de Código</h3>
+                    <p>Incluye README con instrucciones.</p>
+                </div>
+                <a href="files/viernes.zip" class="btn-download" download>
+                    <i class="fas fa-download"></i> Descargar ZIP
+                </a>
+            </div>
+            <div class="readme-preview">
+                <h4>Instrucciones rápidas:</h4>
+                <pre class="cmd-preview">
+INDICES en las bases de datos.
+
+Un indice lo definimos como una estructura de datos que se crea de forma 
+adicional a la tabla para permitir busquedas mas rapidas   
+
+Funciona de manera similar al indice de un libro, en lugar de recorrer 
+todo el documento, permite localizar directamente la informacion deseada     
+
+Por lo que el uso comun de los indices es>
+1.-Acelerar las consultas con WHERE
+2.- Optimizar los JOIN
+3.- Garantizar la unicidad (si es UNIQUE)
+4.- Nos permite reducir el tiempo de busqueda en tablas grandes
+
+CREATE INDEX indx_ ON Libros (autor);
+
+SELECT id_libro, titulo, autor FROM Libros
+    WHERE autor = 'Gabriel García Márquez';
+
+ALTER TABLE Libros RENAME INDEX indx_ TO indx_libros_autor;
+
+Existen diferentes tipos de indices, por ejemplo el INDICE COMPUESTO
+
+
+CREATE INDEX indx_prestamos_matricula_fecha ON Prestamos (matricula, fecha_prestamo);
+
+SELECT * FROM Prestamos 
+    WHERE  matricula = 1005 AND fecha_prestamo >= '2024-08-01' ORDER BY fecha_prestamo;
+
+Otro tipo de indice es el UNIQUE;
+
+CREATE INDEX indx_alumnos_matricula ON Alumnos (matricula);
+
+Para ver el uso del indice 
+
+EXPLAIN SELECT * FROM Prestamos WHERE matricula = 1005;
+
+Borra el indice 
+DROP INDEX indx_alumnos_matricula ON Alumnos;
+
+-------------
+
+Stored Procedures
+Simple procedimiento();
+Con parametros procedimiento(param1, param2 ....);
+SP con IN, OUT, indx_libros_autor
+
+1.- Crea un SP que utilice IN, y que muestre los datos recibiendo como parametro el autor.
+
+DELIMITER //
+CREATE PROCEDURE autor(
+    IN p_autor VARCHAR(100)
+)
+BEGIN
+DECLARE t_autor VARCHAR(100);
+SET t_autor = TRIM(p_autor);
+
+SELECT id_libro, titulo, anio_publicacion
+    FROM Libros
+    WHERE autor = t_autor;
+
+END //
+DELIMITER ;
+
+CALL autor('Gabriel García Márquez');
+
+2.- Crea un SP que muestre los alumnos de un grado en particulas, utiliza IN para mandar el 
+y verificar si el grado esta vacio, si lo esta, entonces que muestre un erro en pantalla.
+
+DELIMITER //
+CREATE PROCEDURE alumnosGrado(
+IN p_grado VARCHAR(50)
+)
+BEGIN
+ IF p_grado IS NULL OR TRIM(p_grado) = '' THEN
+    SELECT 'ERROR: No mandaste el parametro' AS Error;
+
+    ELSE
+    SELECT matricula, nombre FROM Alumnos
+        WHERE grado = p_grado;
+END IF;
+
+END // 
+DELIMITER ;
+
+
+CALL alumnosGrado('3° Secundaria');
+
+
+
+                </pre>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-lightbulb"></i> 5. Conclusiones</h2>
+            <div class="content-box">
+                <p><strong>Aprendizaje:</strong> Hay maneras de hacer consultar mucho mas eficazmente pero hay que ser
+                    muy selectivos en cuando y que contextos aplicar indices que a fin de cuentas son recursos gastados.
+                </p>
+                <p><strong>Problemas y Soluciones:</strong> Al comienzo me equivoque nombrando al indice, no era
+                    referencial, pero por eso mismo aprendi a cambiarles el nombre.</p>
+                <p><strong>Mejoras Futuras:</strong> Analizar mejor los contextos en los que conviene usar indices y
+                    cuando no.</p>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-quote-right"></i> 6. Referencias</h2>
+            <div class="content-box">
+                <ul class="references-list">
+                    <li>Clase de Bases de Datos Avanzadas (2026). <em>UDEM</em>.</li>
+                    <li>Castañeda, R. (2023, 10 de mayo). Tutorial de índices de SQL Server para principiantes.
+                        DataCamp. <em>https://www.datacamp.com/es/tutorial/sql-server-index</em>.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Lenin Campos | Bases de Datos Avanzadas</p>
+    </footer>
+
+    <script src="../../script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+
+</html>

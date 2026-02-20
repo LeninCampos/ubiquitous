@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte Sesión 2 | Lenin Campos</title>
+    <link rel="stylesheet" href="../../style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="../../index.html"><i class="fas fa-terminal"></i> LeninCampos</a>
+        </div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="../../index.html">/home</a></li>
+            <li><a href="../index.html">../volver_al_parcial</a></li>
+        </ul>
+        <div class="burger" onclick="toggleMenu()">
+            <div class="line1"></div>
+            <div class="line2"></div>
+            <div class="line3"></div>
+        </div>
+    </nav>
+
+    <header class="report-header">
+        <div class="header-content">
+            <div class="meta-tags">
+                <span class="tag">Parcial 1</span>
+                <span class="tag">Semana 4</span>
+                <span class="tag">Sesión 2</span>
+            </div>
+            <h1>Las tres fases de la normalizacion en bases de datos SQL</h1>
+            <p class="subtitle">Fecha: 6 de Febrero, 2026</p>
+        </div>
+    </header>
+
+    <main class="report-container">
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-bullseye"></i> 1. Objetivo y Contexto</h2>
+            <div class="content-box">
+                <p><strong>Objetivo:</strong> Comprender la normalizacion como buena practica en la creacion y manipulacion de las bases de datos. Sus 3 diferentes fases y la funcion y categoria de cada una de estas</p>
+                <p><strong>Contexto:</strong> Previo a llegar a una base de datos, un sistema de almacenamiento de datos debe estar normalizado para optimizar su previa implementacion en el dbms.</p>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-book"></i> 2. Conceptos y Profundización</h2>
+            <div class="content-box">
+                <p></p>
+                <ul>
+                    <li><strong>Normalizacion:</strong> La normalización de bases de datos es un proceso de diseño de bases de datos que organiza los datos en estructuras de tablas específicas. Ayuda a mejorar la integridad de los datos, prevenir anomalías en los datos, minimizar la redundancia de datos y reforzar el rendimiento de las consultas.</li>
+                    <li><strong>Primera fase normal:</strong> La primera forma normal, el criterio de normalización de bases de datos más básico, requiere que un esquema de tabla de base de datos incluya una clave principal y excluya la repetición entre columnas.</li>
+                    <li><strong>Segunda forma normal:</strong> ningún atributo que no sea clave tiene una dependencia parcial de la clave principal en la tabla. En otras palabras, si una clave principal es una clave compuesta, el atributo que no es clave debe depender de cada columna de esa clave compuesta.</li>
+                    <li><strong>Tercera forma normal:</strong> Una tabla en tercera forma normal satisface tanto la primera como la segunda forma normal, al tiempo que evita situaciones en las que los atributos no clave dependen de otros atributos no clave en lugar de claves primarias. Cuando los atributos que no son clave dependen de otros atributos que no son clave, esto se conoce como dependencia transitiva, una violación de la tercera forma normal.</li>
+                    <li>IBM(s.f.)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-desktop"></i> 3. Evidencia de Ejecución</h2>
+            <div class="content-box">
+                <p>Captura de pantalla mostrando la compilación y ejecución:</p>
+
+                <figure class="screenshot-container">
+                    <img src="img/21.png" alt="Screenshot de la terminal">
+                    <figcaption>Fig 1. Tabla original.</figcaption>
+                </figure>
+                <figure class="screenshot-container">
+                    <img src="img/22.png" alt="Screenshot de la terminal">
+                    <figcaption>Fig 2. Tabla en primera fase de normalizacion.</figcaption>
+                </figure>
+                <figure class="screenshot-container">
+                    <img src="img/23.png" alt="Screenshot de la terminal">
+                    <figcaption>Fig 3. Tabla en segunda fase de normalizacion.</figcaption>
+                </figure>
+                <figure class="screenshot-container">
+                    <img src="img/24.png" alt="Screenshot de la terminal">
+                    <figcaption>Fig 4. Tabla en tercera fase de normalizacion.</figcaption>
+                </figure>
+                <figure class="screenshot-container">
+                    <img src="img/25.png" alt="Screenshot de la terminal">
+                    <figcaption>Fig 5. Diagrama final de la tabla.</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-box-open"></i> 4. Entregables</h2>
+            <div class="download-card">
+                <div class="download-info">
+                    <h3><i class="fas fa-file-archive"></i> Paquete de Código</h3>
+                    <p>Incluye README con instrucciones.</p>
+                </div>
+                <a href="files/viernes.zip" class="btn-download" download>
+                    <i class="fas fa-download"></i> Descargar ZIP
+                </a>
+            </div>
+            <div class="readme-preview">
+                <h4>Instrucciones rápidas:</h4>
+                <pre class="cmd-preview">
+GRANT ALL PRIVILEGES ON tienda.* TO tienda_user_user @localhost IDENTIFIED BY FLUSH PRIVILEGES;  
+
+USE tienda;
+
+CREATE TABLE articulos(
+    num_item int(20) primary key,
+    desc_item varchar(100) not null,
+    precio float(10, 2) not null,
+);
+
+CREATE TABLE estados(
+    id_estado int primary key auto_increment,
+    estado char(150) not null
+);
+
+CREATE TABLE clientes(
+    id_cliente int primary key,
+    nom_cliente varchar(100),
+    id_estado int not null,
+    FOREIGN KEY(id_estado) REFERENCES estados (id_estado)
+);
+
+CREATE TABLE ordenes(
+    id_orden int primary key,
+    fecha date not null,
+    id_cliente int not null,
+    FOREIGN KEY(id_cliente) REFERENCES clientes(id_cliente)
+);
+
+CREATE TABLE articulos_ordenes(
+    id_orden int not null,
+    num_item int not null,
+    PRIMARY KEY(id_orden, num_item),
+    FOREIGN KEY(id_orden) REFERENCES ordenes(id_orden),
+    FOREIGN KEY(num_item) REFERENCES articulos(num_item)
+);
+                </pre>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-lightbulb"></i> 5. Conclusiones</h2>
+            <div class="content-box">
+                <p><strong>Aprendizaje:</strong> Antes de programar cualqueir tabla, es importante normalizar para hacer todo más eficaz y funcinal.</p>
+                <p><strong>Problemas y Soluciones:</strong> Convertir correctamente las tablas, sin dejar pasar detalles</p>
+                <p><strong>Mejoras Futuras:</strong> Practicar para diferenciar mejor entre las 3 fases</p>
+            </div>
+        </section>
+
+        <section class="report-section">
+            <h2 class="section-title"><i class="fas fa-quote-right"></i> 6. Referencias</h2>
+            <div class="content-box">
+                <ul class="references-list">
+                    <li>Clase de Bases de Datos Avanzadas (2026). <em>UDEM</em>.</li>
+                    <li>IBM. (s. f.). ¿Qué es la normalización de bases de datos? Think Topics. <em>https://www.ibm.com/mx-es/think/topics/database-normalization</em>.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Lenin Campos | Bases de Datos Avanzadas</p>
+    </footer>
+
+    <script src="../../script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+</body>
+
+</html>
