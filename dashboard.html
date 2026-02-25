@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Red | Proyecto Final</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos extra específicos para la tabla de datos */
+        .data-table-container {
+            background: var(--bg-card);
+            border: 1px solid #334155;
+            border-radius: 8px;
+            overflow-x: auto;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+        }
+        th {
+            color: var(--primary);
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        tr:hover { background-color: rgba(56, 189, 248, 0.05); }
+        .status-ok { color: #4ade80; }
+        .status-warn { color: #facc15; }
+        .status-bad { color: #ef4444; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="index.html"><i class="fas fa-satellite-dish"></i> NetMonitor</a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">/home</a></li>
+            <li><a href="#" class="active">/live-data</a></li>
+        </ul>
+    </nav>
+
+    <header class="tech-header small-header">
+        <div class="header-content">
+            <span class="cmd-text">./exec_analisis_red.sh --live</span>
+            <h1>Resultados Experimentales</h1>
+            <p>Monitoreo de latencia y jitter en tiempo real.</p>
+        </div>
+    </header>
+
+    <section class="main-container">
+        
+        <div class="grid-parciales" style="margin-bottom: 40px;">
+            <article class="card-parcial" style="text-align: center;">
+                <h3 style="color: var(--primary);">Latencia Promedio</h3>
+                <h1 id="avg-lat">-- ms</h1>
+            </article>
+            <article class="card-parcial" style="text-align: center;">
+                <h3 style="color: var(--secondary);">Jitter Máximo</h3>
+                <h1 id="max-jit">-- ms</h1>
+            </article>
+            <article class="card-parcial" style="text-align: center;">
+                <h3 style="color: #ef4444;">Pérdida Paquetes</h3>
+                <h1 id="total-loss">0%</h1>
+            </article>
+        </div>
+
+        <h2 class="section-title"> > /var/log/network_data.csv</h2>
+        
+        <div class="data-table-container">
+            <table id="networkTable">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Host Destino</th>
+                        <th>Latencia (ms)</th>
+                        <th>Jitter (ms)</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td colspan="5">Cargando datos...</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <a href="datos_red.csv" class="btn-card" download><i class="fas fa-download"></i> Descargar CSV Completo</a>
+        </div>
+    </section>
+
+    <footer>
+        <p>Lenin Campos | Proyecto de Investigación 2026</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Script simple para leer el CSV y poblar la tabla
+        async function loadData() {
+            try {
+                const response = await fetch('datos_red.csv');
+                const data = await response.text();
+                
+                const tableBody = document.querySelector('#networkTable tbody');
+                const rows = data.split('\n').slice(1); // Ignorar encabezado
+                
+                let html = '';
+                let totalLat = 0;
+                let maxJit = 0;
+                let count = 0;
+
+                // Leemos las últimas 10 filas para no saturar la tabla (invertido para ver lo más reciente)
+                rows.reverse().forEach(row => {
+                    const cols = row.split(',');
+                    if (cols.length >= 5) {
+                        const lat = parseFloat(cols[2]);
+                        const jit = parseFloat(cols[3]);
+                        
+                        // Cálculos rápidos para las tarjetas
+                        if(!isNaN(lat)) {
+                            totalLat += lat;
+                            count++;
+                            if (jit > maxJit) maxJit = jit;
+                        }
+
+                        // Lógica de colores semáforo
+                        let statusClass = 'status-ok';
+                        let statusText = 'STABLE';
+                        if (lat > 100 || jit > 20) { statusClass = 'status-warn'; statusText = 'LAG'; }
+                        if (parseFloat(cols[4]) > 0) { statusClass = 'status-bad'; statusText = 'LOSS'; }
+
+                        html += `
+                            <tr>
+                                <td>${cols[0]}</td>
+                                <td>${cols[1]}</td>
+                                <td>${cols[2]}</td>
+                                <td>${cols[3]}</td>
+                                <td class="${statusClass}">[${statusText}]</td>
+                            </tr>
+                        `;
+                    }
+                });
+
+                tableBody.innerHTML = html;
+
+                // Actualizar tarjetas
+                if (count > 0) {
+                    document.getElementById('avg-lat').innerText = (totalLat / count).toFixed(2) + ' ms';
+                    document.getElementById('max-jit').innerText = maxJit + ' ms';
+                }
+
+            } catch (error) {
+                console.error('Error cargando CSV:', error);
+                document.querySelector('#networkTable tbody').innerHTML = '<tr><td colspan="5">Error: No se encontró datos_red.csv</td></tr>';
+            }
+        }
+
+        // Cargar datos al iniciar
+        loadData();
+        // Refrescar cada 10 segundos
+        setInterval(loadData, 10000);
+    </script>
+</body>
+</html>
