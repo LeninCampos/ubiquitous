@@ -45,29 +45,20 @@
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-bullseye"></i> 1. Objetivo y Contexto</h2>
             <div class="content-box">
-                <p><strong>Objetivo:</strong> Configurar el DBMS para empezar a usarlo, crear nuevos usuarios desde el
-                    administrador y verificar cómo funciona la asignación de los diferentes permisos en la BD.</p>
-                <p><strong>Contexto:</strong> En nuestra máquina virtual previamente teníamos instalado MariaDB,
-                    configurado para el arranque automático al iniciar la instancia de la VM.</p>
+                <p><strong>Objetivo:</strong> Implementar medidas de seguridad (Hardening) en el servidor de base de datos MariaDB y aplicar el Lenguaje de Control de Datos (DCL) para la segregación de privilegios. Se busca evitar el uso del usuario 'root' para operaciones rutinarias, estableciendo roles específicos para la gestión de la base de datos "Biblioteca".</p>
+                <p><strong>Contexto:</strong> Una instalación por defecto de un DBMS es insegura. Es imperativo configurar la autenticación, eliminar usuarios anónimos y bases de datos de prueba antes de cualquier despliegue. Además, la gestión de backups lógicos es crucial para la recuperación ante desastres.</p>
             </div>
         </section>
 
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-book"></i> 2. Conceptos y Profundización</h2>
             <div class="content-box">
-                <p>Dentro del servidor, con el superusuario configuramos el perfil de administrador del DBMS. Una vez
-                    configurado, accedimos como administradores, creamos una base de datos y un usuario con los permisos
-                    para alterar dicha base de datos (usando principalmente DDL) y finalmente realizamos un backup de la
-                    misma.</p>
+                <p>La sesión se centró en la administración técnica del DBMS, diferenciando entre usuarios del sistema operativo y usuarios de la base de datos.</p>
                 <ul>
-                    <li><strong>DDL:</strong> Comandos de SQL utilizados para definir, modificar y gestionar la
-                        estructura de los objetos en una base de datos.</li>
-                    <li><strong>root:</strong> El usuario root del servidor Linux tiene la facultad para ejecutar
-                        comandos en el sistema operativo, mientras que el root del DBMS tiene la facultad de gestionar
-                        todo dentro del gestor de base de datos.</li>
-                    <li><strong>DBMS:</strong> Database management system*(sistema gestor de bases de datos).</li>
-                    <li><strong>Limitaciones:</strong> Para este ejercicio guiado, la mayor limitante viene de la poca
-                        familiarización con el ambiente de Linux.</li>
+                    <li><strong>DCL (Data Control Language):</strong> Subconjunto de SQL utilizado para controlar el acceso a los datos. Comandos principales: <code>GRANT</code> (otorgar permisos) y <code>REVOKE</code> (quitar permisos). Esto permite implementar el principio de "menor privilegio".</li>
+                    <li><strong>Mysql_secure_installation:</strong> Script de seguridad crítico que permite establecer la contraseña de root, eliminar usuarios anónimos, deshabilitar el login remoto de root y borrar la base de datos 'test'.</li>
+                    <li><strong>Root del Sistema vs Root del DBMS:</strong> El usuario 'root' de Linux tiene control sobre el kernel y los archivos, mientras que el 'root' de MariaDB tiene control total sobre los esquemas y datos. Son entidades separadas aunque compartan nombre.</li>
+                    <li><strong>Backup Lógico (mysqldump):</strong> Herramienta que genera un archivo de texto con las sentencias SQL necesarias (CREATE, INSERT) para reconstruir la base de datos desde cero.</li>
                 </ul>
             </div>
         </section>
@@ -75,15 +66,15 @@
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-desktop"></i> 3. Evidencia de Ejecución</h2>
             <div class="content-box">
-                <p>Captura de pantalla mostrando la compilación y ejecución:</p>
+                <p>Captura de pantalla mostrando la gestión de usuarios y pruebas:</p>
 
                 <figure class="screenshot-container">
                     <img src="img/21.png" alt="Screenshot de la terminal">
-                    <figcaption>Fig 1. Ingresando al DBMS como administrador.</figcaption>
+                    <figcaption>Fig 1. Creación de la BD 'Biblioteca' y asignación de privilegios con GRANT.</figcaption>
                 </figure>
                 <figure class="screenshot-container">
                     <img src="img/22.png" alt="Screenshot de la terminal">
-                    <figcaption>Fig 2. Manipulando la BD como el usuario que creamos.</figcaption>
+                    <figcaption>Fig 2. Verificación de persistencia de datos y manipulación (DML) con el nuevo usuario.</figcaption>
                 </figure>
             </div>
         </section>
@@ -93,7 +84,7 @@
             <div class="download-card">
                 <div class="download-info">
                     <h3><i class="fas fa-file-archive"></i> Paquete de Código</h3>
-                    <p>Incluye README con instrucciones.</p>
+                    <p>Incluye Script SQL del respaldo.</p>
                 </div>
                 <a href="files/viernes.zip" class="btn-download" download>
                     <i class="fas fa-download"></i> Descargar ZIP
@@ -103,13 +94,12 @@
                 <h4>Instrucciones rápidas:</h4>
                 <pre class="cmd-preview">
 $ sudo mariadb_secure_installation
-$ su - lenin-campos
 $ mysql -u root -p
-$ CREATE DATABASE  Biblioteca;
-$ GRANT ALL PRIVILEGES ON Biblioteca.* -> To biblio_user@localhost IDENTIFIED BY '666';
+MariaDB [(none)]> CREATE DATABASE Biblioteca;
+MariaDB [(none)]> GRANT ALL PRIVILEGES ON Biblioteca.* TO 'biblio_user'@'localhost' IDENTIFIED BY 'pass_segura';
+MariaDB [(none)]> FLUSH PRIVILEGES;
 $ mysql -u biblio_user -p
 $ mysqldump -u biblio_user -p Biblioteca > respaldo_biblioteca.sql
-$ more respaldo_biblioteca.sql
                 </pre>
             </div>
         </section>
@@ -117,12 +107,9 @@ $ more respaldo_biblioteca.sql
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-lightbulb"></i> 5. Conclusiones</h2>
             <div class="content-box">
-                <p><strong>Aprendizaje:</strong> Se pueden usar simultáneamente varias terminales para crear usuarios
-                    con permisos diferentes que usen la BD y realizar respaldos.</p>
-                <p><strong>Problemas y Soluciones:</strong> Al comienzo me atrasé con un comando, pero empecé a
-                    comprender lo que estábamos tratando de hacer y llego un punto en que sin necesidad de copiar los
-                    comandos, con saber que teniamos que hacer podia hacerlo.</p>
-                <p><strong>Mejoras Futuras:</strong> Practicar más el uso de la terminal.</p>
+                <p><strong>Aprendizaje:</strong> Comprendí la importancia de no operar nunca como root. La creación de usuarios específicos para cada aplicación (en este caso, 'biblio_user') aísla los riesgos de seguridad. Además, aprendí a realizar respaldos "en caliente" sin detener el servicio.</p>
+                <p><strong>Problemas y Soluciones:</strong> Al principio confundí la contraseña del usuario del sistema operativo con la del usuario de base de datos al usar `mysqldump`. Lo solucioné entendiendo que el flag `-p` solicita la contraseña del usuario de MariaDB definido en `-u`.</p>
+                <p><strong>Mejoras Futuras:</strong> Automatizar el proceso de backup mediante un script en Bash y programarlo con `cron` para que se ejecute diariamente.</p>
             </div>
         </section>
 
@@ -130,7 +117,7 @@ $ more respaldo_biblioteca.sql
             <h2 class="section-title"><i class="fas fa-quote-right"></i> 6. Referencias</h2>
             <div class="content-box">
                 <ul class="references-list">
-                    <li>Clase de Bases de Datos Avanzadas (2026). <em>UDEM</em>.</li>
+                    <li>MariaDB Foundation. (2025). <em>MariaDB Knowledge Base: Account Management</em>.</li>
                 </ul>
             </div>
         </section>

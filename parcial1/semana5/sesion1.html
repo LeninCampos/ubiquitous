@@ -35,7 +35,7 @@
                 <span class="tag">Semana 5</span>
                 <span class="tag">Sesión 1</span>
             </div>
-            <h1>Uso de procedures</h1>
+            <h1>Procedimientos Almacenados (Stored Procedures)</h1>
             <p class="subtitle">Fecha: 10 de Febrero, 2026</p>
         </div>
     </header>
@@ -45,8 +45,8 @@
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-bullseye"></i> 1. Objetivo y Contexto</h2>
             <div class="content-box">
-                <p><strong>Objetivo:</strong> Entender que son los procedures y como funcionan, ver los diferentes tipos y que implica cada uno y como manejarlos.</p>
-                <p><strong>Contexto: </strong>En nuestra previa instancia de google cloud, tenemos descargada MariaDB, con una db 'Biblioteca', con tablas y registros hechos.</p>
+                <p><strong>Objetivo:</strong> Desarrollar lógica de programación del lado del servidor mediante Procedimientos Almacenados (Stored Procedures). Se busca encapsular consultas complejas y reglas de negocio dentro de la base de datos para promover la reutilización de código y mejorar la seguridad.</p>
+                <p><strong>Contexto: </strong> En arquitecturas empresariales, delegar toda la lógica a la aplicación cliente puede ser ineficiente e inseguro. Los SPs permiten ejecutar múltiples operaciones SQL como una sola unidad atómica, reduciendo el tráfico de red y protegiendo contra inyecciones SQL al parametrizar las entradas.</p>
             </div>
         </section>
 
@@ -54,7 +54,10 @@
             <h2 class="section-title"><i class="fas fa-book"></i> 2. Conceptos y Profundización</h2>
             <div class="content-box">
                 <ul>
-                    <li><strong>Stored Procedures:</strong> Es un programa al que se puede llamar para realizar operaciones. Un procedimiento puede incluir sentencias de lenguaje principal y sentencias SQL. Los procedimientos en SQL proporcionan las mismas ventajas que los procedimientos en un lenguaje principal. IBM(s.f.).</li>
+                    <li><strong>Stored Procedures:</strong> Subrutinas de código SQL guardadas en el diccionario de datos. Se pre-compilan al crearse, lo que mejora el tiempo de ejecución en comparación con enviar queries de texto plano repetidamente.</li>
+                    <li><strong>Delimitadores (`DELIMITER //`):</strong> En SQL, el punto y coma `;` termina una sentencia. Al definir un SP, necesitamos cambiar temporalmente este delimitador para que el DBMS no ejecute el código hasta que terminemos de escribir todo el bloque `BEGIN...END`.</li>
+                    <li><strong>Parámetros (IN, OUT, INOUT):</strong> Los SPs pueden recibir datos (`IN`), devolver resultados (`OUT`) o ambos. Esto los convierte en funciones flexibles. En la práctica usamos `IN` para parametrizar filtros dinámicos (ej. filtrar por grado).</li>
+                    <li><strong>Variables:</strong> Uso de `DECLARE` para variables locales (viven solo dentro del SP) vs variables de sesión (`@variable`).</li>
                 </ul>
             </div>
         </section>
@@ -62,87 +65,38 @@
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-desktop"></i> 3. Evidencia de Ejecución</h2>
             <div class="content-box">
-                <p>Captura de pantalla mostrando la compilación y ejecución:</p>
+                <p>Implementación y llamada de procedimientos:</p>
 
                 <figure class="screenshot-container">
                     <img src="img/11.png" alt="Screenshot de la terminal en Ubiquitous">
-                    <figcaption>Fig 1. Proceso para imprimir alumnos y matriculas.</figcaption>
+                    <figcaption>Fig 1. Ejecución de `CALL etiquetaAlumno()` mostrando concatenación de cadenas.</figcaption>
                 </figure>
                 <figure class="screenshot-container">
                     <img src="img/12.png" alt="Screenshot de la terminal en Ubiquitous">
-                    <figcaption>Fig 2. Procesos para crear los correos con los nombres.</figcaption>
+                    <figcaption>Fig 2. Procedimiento `email_generado` que construye correos dinámicos basados en dominio y nombre.</figcaption>
                 </figure>
             </div>
         </section>
 
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-box-open"></i> 4. Entregables</h2>
-            <div class="download-card">
-                <div class="download-info">
-                    <h3><i class="fas fa-file-archive"></i> Paquete de Código</h3>
-                    <p>Incluye README con instrucciones.</p>
-                </div>
-                <a href="files/martes.zip" class="btn-download" download>
-                    <i class="fas fa-download"></i> Descargar ZIP
-                </a>
-            </div>
             <div class="readme-preview">
-                <h4>Instrucciones rápidas:</h4>
+                <h4>Código SP destacado:</h4>
                 <pre class="cmd-preview">
-//uso de stored procedures en mariadb
-
-//1.- Construye un SP que cree una etiqueta simple con el nombre del alumno
-
-DELIMITER // 
-CREATE PROCEDURE etiquetaAlumno()
-BEGIN
-    SELECT CONCAT('Alumno: ', nombre) AS Alumnos
-    FROM Alumnos;
-END // 
-DELIMITER ;
-
-//2.- Construye un sp qeu utilice LA ETIQUETA LLAMADA MATRICULA ´EL NOMBRE DEL ALUMNO
-
-DELIMITER $$ 
-CREATE PROCEDURE matriculaAlumno()
-BEGIN
-SELECT CONCAT(matricula, ' - ', nombre) AS Alumnos
-    FROM Alumnos;
-END $$
-DELIMITER ;
-
-//3.- Construye un SP que utilice una etiqueta llamada matricula + el nombre del alumno en mayusculas.
-
-DELIMITER $$
-CREATE PROCEDURE matriculaAlumnoM()
-BEGIN
-SELECT CONCAT(matricula, '-', UPPER(nombre)) AS Alumnos
-    FROM Alumnos;
-END $$
-DELIMITER ;
-
-
--- Para llamar al procedimiento se usa CALL
--- Para ver procedimientos uso SHOW PROCEDURE STATUS WHERE Db='Biblioteca';
--- BORRAR DROP PROCEDURE nombre();
-
-//4.- Construye un email usando IN 
-
 DELIMITER $$
 CREATE PROCEDURE email_generado(
-    IN dominio VARCHAR(100)
+    IN dominio VARCHAR(100) -- Parámetro de entrada
 ) 
 BEGIN
-    DECLARE dom VARCHAR(100);
-    SET dom = dominio;
-
-
+    -- Lógica de negocio encapsulada
     SELECT nombre, 
-        CONCAT(LOWER(REPLACE(nombre, ' ', ',')), '@',dom) AS email
-        FROM Alumnos;
-
+        CONCAT(LOWER(REPLACE(nombre, ' ', '.')), '@', dominio) AS email_generado
+    FROM Alumnos;
 END $$ 
 DELIMITER ;
+
+-- Ejecución
+CALL email_generado('udem.edu');
                 </pre>
             </div>
         </section>
@@ -150,9 +104,9 @@ DELIMITER ;
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-lightbulb"></i> 5. Conclusiones</h2>
             <div class="content-box">
-                <p><strong>Aprendizaje:</strong> Usar y llamar procesos preestablecidos e usar parametros y variables locales en estos.</p>
-                <p><strong>Problemas y Soluciones:</strong> Al comienzo usar bien los comandos me costo, y es dificil ya que no se pueden editar, se borran y crean de 0, pero me ayudo a entenderlos mejor.</p>
-                <p><strong>Mejoras Futuras:</strong> Practicar el uso de consultas y los diferentes tipos de parametros que hay.</p>
+                <p><strong>Aprendizaje:</strong> Los SPs son fundamentales para el principio de "Abstraction Layer". Aprendí que al modificar un SP, todas las aplicaciones que lo usan se actualizan automáticamente sin necesidad de redeployar el código fuente del backend.</p>
+                <p><strong>Problemas y Soluciones:</strong> La sintaxis de los delimitadores fue confusa al principio, causando errores de sintaxis. Entendí que es un mecanismo necesario para "escapar" el cuerpo del procedimiento durante su definición.</p>
+                <p><strong>Mejoras Futuras:</strong> Implementar manejo de errores con `DECLARE EXIT HANDLER` para gestionar excepciones (ej. si un alumno no existe) de manera elegante.</p>
             </div>
         </section>
 
@@ -160,9 +114,8 @@ DELIMITER ;
             <h2 class="section-title"><i class="fas fa-quote-right"></i> 6. Referencias</h2>
             <div class="content-box">
                 <ul class="references-list">
-                    <li>Clase de Bases de Datos Avanzadas (2026). <em>UDEM</em>.</li>
-                    <li>IBM. (s. f.). Procedimientos almacenados. IBM Documentation. Recuperado el 14 de febrero de 2026, de <em>https://www.ibm.com/docs/es/i/7.5.0?topic=triggers-stored-procedures</em>.</li>
-                    <li></em>.</li>
+                    <li>MariaDB Server Documentation. (2025). <em>Stored Procedures Syntax</em>.</li>
+                    <li>IBM DB2 Docs. (s. f.). <em>Benefits of Stored Procedures</em>.</li>
                 </ul>
             </div>
         </section>

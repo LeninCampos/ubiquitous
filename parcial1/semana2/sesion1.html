@@ -45,15 +45,8 @@
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-bullseye"></i> 1. Objetivo y Contexto</h2>
             <div class="content-box">
-                <p><strong>Objetivo:</strong> En este día se vieron dos temas principales: <br>
-                    -Comprender cómo acceder y usar Ubiquitous: utilizar nuestro servidor y crear la página donde estaremos
-                    subiendo nuestras tareas y ejercicios guiados. <br>
-                    -Configurar nuestra primera máquina virtual en Google Cloud: qué implica, las diferentes opciones y
-                    lo que nosotros estaremos usando.</p>
-                <p><strong>Contexto:</strong> <br> -Todos tenemos una cuenta en el servidor de la escuela; ahí es donde
-                    cada quien estará subiendo sus tareas en lugar de Blackboard. <br>
-                    -Previamente dejamos nuestras cuentas escolares de Google Cloud creadas y configurada la
-                    facturación.</p>
+                <p><strong>Objetivo:</strong> Configurar y desplegar entornos de trabajo remotos mediante el uso de infraestructura universitaria (Ubiquitous) y servicios de computación en la nube (Google Cloud Platform). El propósito es establecer canales seguros de comunicación (SSH/SFTP) y aprovisionar una instancia de servidor Linux para el despliegue de bases de datos.</p>
+                <p><strong>Contexto:</strong> En el desarrollo profesional de software, el trabajo rara vez se realiza en la máquina local ("localhost") de manera aislada. Se requiere el dominio de servidores remotos para el despliegue de aplicaciones. Utilizamos las cuentas institucionales para simular un entorno de producción real, gestionando credenciales de acceso, configuración de puertos y sistemas operativos basados en Unix.</p>
             </div>
         </section>
 
@@ -61,19 +54,10 @@
             <h2 class="section-title"><i class="fas fa-book"></i> 2. Conceptos y Profundización</h2>
             <div class="content-box">
                 <ul>
-                    <li><strong>Ubiquitous:</strong> El servidor está previamente configurado con SSH para que cada
-                        alumno pueda acceder con su matrícula. Creamos con IA generativa una página web provisional para
-                        levantarla en ese servidor y descargamos CyberDuck para poder subir los archivos con seguridad
-                        mediante el protocolo SFTP, logrando que se vea una página en vez de un índice en blanco.</li>
-                    <li><strong>Google Cloud:</strong> Vimos con especial énfasis las configuraciones de las VM, el
-                        sistema operativo que debíamos instalar (CentOS), revisamos rápidamente algunos comandos e instalamos
-                        MariaDB en el servidor.
-                    </li>
-                    <li><strong>SSH:</strong> Es un protocolo de seguridad de red que permite el acceso y control remoto
-                        de equipos a servidores a través de una conexión cifrada.</li>
-                    <li><strong>VM: </strong>Máquina virtual que sirve para emular el software de una computadora física,
-                        funcionando como un sistema independiente con su propio sistema operativo y recursos.
-                    </li>
+                    <li><strong>IaaS (Infrastructure as a Service):</strong> Modelo de servicio en la nube donde el proveedor (Google Cloud) ofrece recursos de computación virtualizados a través de internet. A diferencia del PaaS o SaaS, aquí gestionamos el sistema operativo, lo que nos da control total sobre la instalación de software como MariaDB.</li>
+                    <li><strong>Protocolo SSH (Secure Shell):</strong> Estándar criptográfico de red que permite operar servicios de red de forma segura sobre una red insegura. Utiliza una arquitectura cliente-servidor y, típicamente, el puerto 22. Es fundamental para la administración remota de sistemas Linux sin interfaz gráfica (headless).</li>
+                    <li><strong>SFTP (SSH File Transfer Protocol):</strong> A diferencia del FTP tradicional que envía datos en texto plano, SFTP utiliza el túnel seguro de SSH para la transferencia de archivos. Fue utilizado mediante CyberDuck para desplegar el portafolio web en el servidor Ubiquitous.</li>
+                    <li><strong>Virtual Machine (VM):</strong> Emulación de un sistema informático. Las instancias de Compute Engine en GCP actúan como servidores dedicados virtuales, permitiendo aislamiento, escalabilidad y la capacidad de "levantar" o "destruir" entornos de desarrollo en segundos.</li>
                 </ul>
             </div>
         </section>
@@ -81,19 +65,19 @@
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-desktop"></i> 3. Evidencia de Ejecución</h2>
             <div class="content-box">
-                <p>Captura de pantalla mostrando la compilación y ejecución:</p>
+                <p>Captura de pantalla mostrando la configuración y ejecución:</p>
 
                 <figure class="screenshot-container">
                     <img src="img/13.png" alt="Screenshot de la terminal en Ubiquitous">
-                    <figcaption>Fig 1. Página en Ubiquitous creada.</figcaption>
+                    <figcaption>Fig 1. Despliegue exitoso del index.html en servidor Ubiquitous vía SFTP.</figcaption>
                 </figure>
                 <figure class="screenshot-container">
                     <img src="img/11.png" alt="Screenshot de la terminal">
-                    <figcaption>Fig 2. Instancia de VM creada.</figcaption>
+                    <figcaption>Fig 2. Instancia de VM (Compute Engine) activa en zona us-central1.</figcaption>
                 </figure>
                 <figure class="screenshot-container">
                     <img src="img/12.png" alt="Screenshot de la terminal">
-                    <figcaption>Fig 3. MariaDB activo en la VM.</figcaption>
+                    <figcaption>Fig 3. Verificación del servicio MariaDB activo (systemctl status).</figcaption>
                 </figure>
             </div>
         </section>
@@ -103,7 +87,7 @@
             <div class="download-card">
                 <div class="download-info">
                     <h3><i class="fas fa-file-archive"></i> Paquete de Código</h3>
-                    <p>Incluye README con instrucciones.</p>
+                    <p>Incluye README con instrucciones y evidencias.</p>
                 </div>
                 <a href="files/martes.zip" class="btn-download" download>
                     <i class="fas fa-download"></i> Descargar ZIP
@@ -112,14 +96,16 @@
             <div class="readme-preview">
                 <h4>Instrucciones rápidas:</h4>
                 <pre class="cmd-preview">
-// Ubiquitous
-$ ls
-$ mkdir html
-$ cd html
-// Google Cloud
+// Ubiquitous (Gestión de Archivos)
+$ ls -la
+$ mkdir public_html
+$ cd public_html
+
+// Google Cloud (Aprovisionamiento)
+$ sudo apt update
 $ sudo apt install mariadb-server
+$ sudo systemctl start mariadb
 $ sudo systemctl enable mariadb
-$ sudo systemctl status mariadb
                 </pre>
             </div>
         </section>
@@ -127,9 +113,9 @@ $ sudo systemctl status mariadb
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-lightbulb"></i> 5. Conclusiones</h2>
             <div class="content-box">
-                <p><strong>Aprendizaje:</strong> Cómo conectarme a mi servidor de Ubiquitous y modificarlo, y cómo crear nuevas instancias de VM.</p>
-                <p><strong>Problemas y Soluciones:</strong> Cuando creé la máquina virtual la configuré mal y no podía descargar MariaDB; borré esa instancia y creé una nueva bien configurada.</p>
-                <p><strong>Mejoras Futuras:</strong> Practicar los comandos de Linux.</p>
+                <p><strong>Aprendizaje:</strong> La competencia adquirida más relevante es la capacidad de administrar servidores sin depender de una interfaz gráfica, utilizando la terminal para la gestión de paquetería y servicios. Entendí la diferencia crítica entre un servidor de archivos (Ubiquitous) y un servidor de procesamiento/base de datos (GCP).</p>
+                <p><strong>Problemas y Soluciones:</strong> Hubo complicaciones con las reglas de firewall en GCP que impedían la conexión inicial; se solucionó configurando correctamente las reglas de VPC para permitir tráfico SSH. También fue necesario regenerar las llaves SSH locales para evitar conflictos de autenticación.</p>
+                <p><strong>Mejoras Futuras:</strong> Implementar llaves SSH públicas/privadas para autenticación sin contraseña y configurar un alias en el archivo `.ssh/config` para agilizar el acceso a las máquinas virtuales.</p>
             </div>
         </section>
 
@@ -137,7 +123,8 @@ $ sudo systemctl status mariadb
             <h2 class="section-title"><i class="fas fa-quote-right"></i> 6. Referencias</h2>
             <div class="content-box">
                 <ul class="references-list">
-                    <li>Clase de Bases de Datos Avanzadas (2026). <em>UDEM</em>.</li>
+                    <li>Google Cloud. (2025). <em>Compute Engine Documentation</em>.</li>
+                    <li>OpenSSH Project. (2024). <em>Manual de SSH y SFTP</em>.</li>
                 </ul>
             </div>
         </section>

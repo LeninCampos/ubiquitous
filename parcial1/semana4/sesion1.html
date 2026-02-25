@@ -32,10 +32,10 @@
         <div class="header-content">
             <div class="meta-tags">
                 <span class="tag">Parcial 1</span>
-                <span class="tag">Semana 3</span>
+                <span class="tag">Semana 4</span>
                 <span class="tag">Sesión 1</span>
             </div>
-            <h1>Descarga de archivos desde internet y editores de texto en terminal</h1>
+            <h1>Descarga de archivos y edición en terminal</h1>
             <p class="subtitle">Fecha: 3 de Febrero, 2026</p>
         </div>
     </header>
@@ -45,12 +45,8 @@
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-bullseye"></i> 1. Objetivo y Contexto</h2>
             <div class="content-box">
-                <p><strong>Objetivo:</strong> Importar y manipular archivos sql en los dos diferentes DBMS que estamos,
-                    viendo las diferencias e implicaciones de cada uno, así como ejecutar un editor de texto en la
-                    terminal como vendría a ser VI, para manipular los archivos desde la terminal, sin necesidad de
-                    manipularlo de manera externa.</p>
-                <p><strong>Contexto:</strong> Descargamos la herramienta wget para poder descargar desde internet un
-                    archivo sql para manipular con los diferentes DBMS.</p>
+                <p><strong>Objetivo:</strong> Automatizar la ingesta de scripts SQL externos utilizando herramientas de línea de comandos (`wget`) y realizar modificaciones "in-situ" en el servidor utilizando editores de texto modales (`vi`). Posteriormente, ejecutar la importación de estos volcados (dumps) tanto en MariaDB como en PostgreSQL para verificar la portabilidad de los datos.</p>
+                <p><strong>Contexto:</strong> En entornos de servidores de producción, rara vez se cuenta con navegadores web para descargar archivos. La capacidad de obtener recursos directamente desde la terminal y editarlos sin depender de una GUI local es una habilidad fundamental para cualquier administrador de bases de datos (DBA).</p>
             </div>
         </section>
 
@@ -58,16 +54,10 @@
             <h2 class="section-title"><i class="fas fa-book"></i> 2. Conceptos y Profundización</h2>
             <div class="content-box">
                 <ul>
-                    <li><strong>wget: </strong>
-                        Herramienta de línea de comandos del proyecto GNU, libre y no interactivo, diseñada para
-                        descargar contenido de servidores web de forma robusta utilizando HTTP, HTTPS y FTP. (GNU
-                        Project, 2024)
-                    </li>
-                    <li><strong>VI: </strong>
-                        Es un editor de texto de pantalla completa, clásico y predeterminado en la mayoría de los
-                        sistemas UNIX/Linux, esencial para la administración de sistemas y emergencias por sus mínimos
-                        requisitos de recursos.
-                    </li>
+                    <li><strong>Wget (World Wide Web Getter):</strong> Herramienta no interactiva de red para descargar archivos vía HTTP, HTTPS y FTP. Su robustez permite reanudar descargas interrumpidas y operar en segundo plano, esencial para scripts de automatización.</li>
+                    <li><strong>Editor VI/VIM:</strong> Editor de texto estándar en sistemas Unix. Funciona mediante "modos": el <em>Modo Comando</em> (para navegar, copiar, guardar) y el <em>Modo Inserción</em> (para escribir). Su eficiencia radica en que no requiere levantar manos del teclado.</li>
+                    <li><strong>Redirección de Entrada/Salida:</strong> El uso de operadores como `>` (redirigir salida a archivo) y `<` (redirigir archivo a entrada de comando) es la base para importar/exportar bases de datos. Ejemplo: `mysql ... < archivo.sql` inyecta el contenido del archivo al proceso del cliente MySQL.</li>
+                    <li><strong>Portabilidad SQL:</strong> Los volcados SQL a menudo requieren ajustes menores al moverse entre DBMS (ej. comillas, tipos de datos específicos) que deben corregirse manualmente con VI.</li>
                 </ul>
             </div>
         </section>
@@ -75,25 +65,15 @@
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-desktop"></i> 3. Evidencia de Ejecución</h2>
             <div class="content-box">
-                <p>Captura de pantalla mostrando la compilación y ejecución:</p>
+                <p>Proceso de descarga, edición e importación:</p>
 
                 <figure class="screenshot-container">
-                    <img src="img/11.png" alt="Screenshot de la terminal en Ubiquitous">
-                    <figcaption>Fig 1. Mensaje de la terminal para mi.</figcaption>
-                </figure>
-                <figure class="screenshot-container">
-                    <img src="img/12.png" alt="Screenshot de la terminal en Ubiquitous">
-                    <figcaption>Fig 2. Instalación de dependencias para poder descargar cosas desde internet de forma
-                        eficiente.</figcaption>
-                </figure>
-                <figure class="screenshot-container">
                     <img src="img/13.png" alt="Screenshot de la terminal en Ubiquitous">
-                    <figcaption>Fig 3. Descargamos la base de datos que nos dio el profe y lo importamos a nuestro
-                        mysql.</figcaption>
+                    <figcaption>Fig 1. Descarga del archivo Biblioteca.sql usando wget desde el servidor de la materia.</figcaption>
                 </figure>
                 <figure class="screenshot-container">
                     <img src="img/14.png" alt="Screenshot de la terminal en Ubiquitous">
-                    <figcaption>Fig 4. Importamos la base de datos ahora a nuestro POSTGRES.</figcaption>
+                    <figcaption>Fig 2. Importación y dump posterior en PostgreSQL usando pg_dumpall.</figcaption>
                 </figure>
             </div>
         </section>
@@ -101,79 +81,20 @@
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-box-open"></i> 4. Entregables</h2>
             <div class="readme-preview">
-                <h4>Instrucciones rápidas:</h4>
+                <h4>Comandos utilizados:</h4>
                 <pre class="cmd-preview">
-&sudo dnf install wget -y 
-& wget https://ubiquitous.udem.edu/~raulms/content/SC3303/Biblioteca.sql
-& ls -l
-&mysqldump --user=biblio_user --password Biblioteca < Biblioteca.sql
+# Descarga
+$ wget https://ubiquitous.udem.edu/~raulms/content/SC3303/Biblioteca.sql
 
-//Dumpear el esquema
-&mysqldump --user=biblio_user --password --no-data Biblioteca > Respaldo-Biblioteca.sql
+# Importación en MariaDB
+$ mysql -u biblio_user -p Biblioteca < Biblioteca.sql
 
-//Solo datos
-&mysqldump --user=biblio_user --password --no-create-info Biblioteca > Biblioteca-datos.sql
+# Respaldo lógico solo datos
+$ mysqldump -u biblio_user -p --no-create-info Biblioteca > datos.sql
 
-//Respaldo del DBMS
-&mysqldump --user=root --pasword --all-databases > TodasLasbases.sql
-
-//Restaurar un BD
-&-u usuario -p
-&mysql --user=usuario --pasword MiBase < EsquemaMiDB.sql
-
-//POSTGRES
-//Toda la BD
-&pg_dumpall -U usuario -f /archivo.sql
-&pg_dumpall -U usuario 01 -d MiDB.sql -f RespaldoMiDB.sql
-
-//SOLO DATOS
-&pg_dumpall -U usuario01 --data-only MiDB > RespaldoDatos.sql
-
-//Solo esquema
-&pg_dumpall -U usuaio01 --schema-only MiDB > EsquemaMiDB.sql
-
-//Restaurar
-&psql -U postgres -f /ruta_absoluta/archivo.sql
-&psql -U usuario -d /MiDB -f /ruta_absoluta/archivo.sql
-&pg_dumpall -f respaldo.sql
-
-        </pre>
-            </div>
-            <div class="readme-preview">
-                <h4>Ejercicios:</h4>
-                <pre class="cmd-preview">
-//Crea un query que muestre una lista de prestamos pendientes, 
-//tomando en consideración que la fecha de devolución es NULL
-SELECT * 
-FROM prestamos 
-WHERE fecha_devolucion IS NULL;
-
-//Muestra la cantidad de libros prestados por cada alumno
-SELECT a.matricula, a.nombre, COUNT(p.id_prestamo) AS n_prestamos
-FROM  alumnos a 
-JOIN prestamos p ON a.matricula = p.matricula
-GROUP BY a.matricula; 
-
-//Muestra los libros prestados durante el mes de agosto del 2024
-SELECT l.titulo
-FROM libros l JOIN prestamos p ON l.id_libro = p.id_libro
-WHERE p.fecha_prestamo BETWEEN '2024-08-01' AND '2024-08-31';
-
-//Muestra los alumnos que hayan prestado algún libro de "Gabriel Garcia Márquez"
-SELECT DISTINCT a.matricula, a.nombre
-FROM libros l JOIN prestamos p ON l.id_libro = p.id_libro JOIN alumnos a ON a.matricula = p.matricula
-WHERE l.autor = 'Gabriel García Márquez';
-
-
-//Muestra el listado de libros que nunca hayan sido prestados
-SELECT DISTINCT *
-FROM libros l
-WHERE l.id_libro NOT IN(
-	SELECT l.id_libro 
-	FROM libros l JOIN prestamos p 
-	ON l.id_libro = p.id_libro);
-
-
+# Operaciones en PostgreSQL
+$ psql -U postgres -f Biblioteca.sql
+$ pg_dumpall -U postgres -f respaldo_pg.sql
                 </pre>
             </div>
         </section>
@@ -181,12 +102,9 @@ WHERE l.id_libro NOT IN(
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-lightbulb"></i> 5. Conclusiones</h2>
             <div class="content-box">
-                <p><strong>Aprendizaje:</strong> Usar un editor de texto en la terminal para modificar archivos desde la
-                    misma terminal para hacer procesos más rápidos, y a dumpear e importar archivos sql en POSTGRES y
-                    MariaDB, y las restricciones de cada una de estas.</p>
-                <p><strong>Problemas y Soluciones:</strong> El tema de las minúsculas y mayúsculas que es diferente, y
-                    con el mismo vi se pudo solucionar rápidamente eso.</p>
-                <p><strong>Mejoras Futuras:</strong> Practicar los comandos de Linux.</p>
+                <p><strong>Aprendizaje:</strong> Dominar `vi` es esencial; al principio es anti-intuitivo por los modos, pero permite ediciones rápidas de archivos SQL gigantes que bloquearían un editor gráfico tradicional. Entendí cómo los operadores de redirección (`<`, `>`) conectan el sistema de archivos con los procesos del DBMS.</p>
+                <p><strong>Problemas y Soluciones:</strong> El archivo SQL original venía con sintaxis específica de MySQL que fallaba en Postgres. Usé `vi` para buscar y reemplazar los tipos de datos incompatibles directamente en el servidor.</p>
+                <p><strong>Mejoras Futuras:</strong> Aprender comandos avanzados de `sed` o `awk` para automatizar el reemplazo de sintaxis incompatible sin tener que abrir el archivo manualmente.</p>
             </div>
         </section>
 
@@ -194,10 +112,8 @@ WHERE l.id_libro NOT IN(
             <h2 class="section-title"><i class="fas fa-quote-right"></i> 6. Referencias</h2>
             <div class="content-box">
                 <ul class="references-list">
-                    <li>Clase de Bases de Datos Avanzadas (2026). <em>UDEM</em>.</li>
-                    <li>GNU Project. (2024). Wget manual. Recuperado el 5 de febrero de 2026, de
-                        <em>from https://www.gnu.org/software/wget/manual/wget.html</em>.
-                    </li>
+                    <li>GNU Project. (2024). <em>GNU Wget Manual</em>.</li>
+                    <li>Vim Documentation. (2025). <em>Intro to VI modes</em>.</li>
                 </ul>
             </div>
         </section>

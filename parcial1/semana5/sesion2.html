@@ -35,7 +35,7 @@
                 <span class="tag">Semana 5</span>
                 <span class="tag">Sesión 2</span>
             </div>
-            <h1>Indices en sql.</h1>
+            <h1>Índices y Optimización de Consultas</h1>
             <p class="subtitle">Fecha: 13 de Febrero, 2026</p>
         </div>
     </header>
@@ -45,10 +45,8 @@
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-bullseye"></i> 1. Objetivo y Contexto</h2>
             <div class="content-box">
-                <p><strong>Objetivo:</strong> Introducirnos acerca de que son los indices en sql y para que sirven,
-                    cuando es bueno usarlos y cuando no.</p>
-                <p><strong>Contexto:</strong> Trabajaremos con los indices en la base de datos que hemos estado usando
-                    de Biblioteca, ya con registros preecargados.</p>
+                <p><strong>Objetivo:</strong> Optimizar el rendimiento de las consultas SQL mediante la creación estratégica de índices. Se analizó el costo-beneficio de indexar columnas y se utilizó la herramienta `EXPLAIN` para auditar el plan de ejecución del motor de base de datos.</p>
+                <p><strong>Contexto:</strong> En bases de datos con millones de registros, una búsqueda secuencial (Full Table Scan) es inaceptable por su lentitud. Los índices son vitales para el rendimiento, pero su abuso degrada la velocidad de escritura (INSERT/UPDATE/DELETE). Encontrar el equilibrio es una tarea clave del DBA.</p>
             </div>
         </section>
 
@@ -56,133 +54,45 @@
             <h2 class="section-title"><i class="fas fa-book"></i> 2. Conceptos y Profundización</h2>
             <div class="content-box">
                 <ul>
-                    <li><strong>Indices sql:</strong> Son estructuras de datos que optimizan la velocidad de consulta y
-                        recuperación de información en tablas grandes, evitando búsquedas secuenciales completas.
-                        Funcionan organizando los datos de columnas específicas en estructuras como B-trees, permitiendo
-                        encontrar filas rápidamente.(Castañeda, 2023)</li>
+                    <li><strong>B-Tree (Árbol B):</strong> Estructura de datos predominante en los índices SQL. Permite búsquedas logarítmicas (O(log n)) en lugar de lineales, organizando los datos en nodos balanceados. Funciona como el índice alfabético de un libro físico.</li>
+                    <li><strong>Índices Compuestos:</strong> Índices que abarcan múltiples columnas (ej. `matricula` + `fecha`). Son efectivos solo si la consulta filtra por la columna más a la izquierda del índice ("Leftmost Prefix Rule").</li>
+                    <li><strong>Cardinalidad:</strong> Medida de la unicidad de los datos en una columna. Columnas con alta cardinalidad (ej. matrícula) son excelentes candidatas para índices; columnas con baja cardinalidad (ej. género: M/F) no suelen beneficiarse tanto.</li>
+                    <li><strong>EXPLAIN:</strong> Comando de diagnóstico que revela cómo el motor resolverá la query. Si en la columna `type` aparece `ALL`, indica un escaneo completo (malo); si aparece `ref` o `const`, está usando índices (bueno).</li>
+                </ul>
             </div>
         </section>
 
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-desktop"></i> 3. Evidencia de Ejecución</h2>
             <div class="content-box">
-                <p>Captura de pantalla mostrando la compilación y ejecución:</p>
+                <p>Análisis de rendimiento antes y después de indexar:</p>
 
                 <figure class="screenshot-container">
-                    <img src="img/21.png" alt="Screenshot de la terminal">
-                    <figcaption>Fig 1. Mostrar el estado de los procesos.</figcaption>
+                    <img src="img/22.png" alt="Screenshot de la terminal">
+                    <figcaption>Fig 1. Creación de un índice simple en la tabla Alumnos.</figcaption>
                 </figure>
                 <figure class="screenshot-container">
-                    <img src="img/22.png" alt="Screenshot de la terminal">
-                    <figcaption>Fig 2. Creaacion de indice.</figcaption>
+                    <img src="img/21.png" alt="Screenshot de la terminal">
+                    <figcaption>Fig 2. Uso de `EXPLAIN` confirmando que la búsqueda ya no es secuencial (type: ref).</figcaption>
                 </figure>
             </div>
         </section>
 
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-box-open"></i> 4. Entregables</h2>
-            <div class="download-card">
-                <div class="download-info">
-                    <h3><i class="fas fa-file-archive"></i> Paquete de Código</h3>
-                    <p>Incluye README con instrucciones.</p>
-                </div>
-                <a href="files/viernes.zip" class="btn-download" download>
-                    <i class="fas fa-download"></i> Descargar ZIP
-                </a>
-            </div>
             <div class="readme-preview">
-                <h4>Instrucciones rápidas:</h4>
+                <h4>Comandos de Optimización:</h4>
                 <pre class="cmd-preview">
-INDICES en las bases de datos.
+-- 1. Crear índice para acelerar búsquedas por autor
+CREATE INDEX indx_libros_autor ON Libros (autor);
 
-Un indice lo definimos como una estructura de datos que se crea de forma 
-adicional a la tabla para permitir busquedas mas rapidas   
+-- 2. Índice compuesto para búsquedas complejas
+-- Optimiza: WHERE matricula=X AND fecha=Y
+CREATE INDEX indx_prestamos_mat_fecha ON Prestamos (matricula, fecha_prestamo);
 
-Funciona de manera similar al indice de un libro, en lugar de recorrer 
-todo el documento, permite localizar directamente la informacion deseada     
-
-Por lo que el uso comun de los indices es>
-1.-Acelerar las consultas con WHERE
-2.- Optimizar los JOIN
-3.- Garantizar la unicidad (si es UNIQUE)
-4.- Nos permite reducir el tiempo de busqueda en tablas grandes
-
-CREATE INDEX indx_ ON Libros (autor);
-
-SELECT id_libro, titulo, autor FROM Libros
-    WHERE autor = 'Gabriel García Márquez';
-
-ALTER TABLE Libros RENAME INDEX indx_ TO indx_libros_autor;
-
-Existen diferentes tipos de indices, por ejemplo el INDICE COMPUESTO
-
-
-CREATE INDEX indx_prestamos_matricula_fecha ON Prestamos (matricula, fecha_prestamo);
-
-SELECT * FROM Prestamos 
-    WHERE  matricula = 1005 AND fecha_prestamo >= '2024-08-01' ORDER BY fecha_prestamo;
-
-Otro tipo de indice es el UNIQUE;
-
-CREATE INDEX indx_alumnos_matricula ON Alumnos (matricula);
-
-Para ver el uso del indice 
-
-EXPLAIN SELECT * FROM Prestamos WHERE matricula = 1005;
-
-Borra el indice 
-DROP INDEX indx_alumnos_matricula ON Alumnos;
-
--------------
-
-Stored Procedures
-Simple procedimiento();
-Con parametros procedimiento(param1, param2 ....);
-SP con IN, OUT, indx_libros_autor
-
-1.- Crea un SP que utilice IN, y que muestre los datos recibiendo como parametro el autor.
-
-DELIMITER //
-CREATE PROCEDURE autor(
-    IN p_autor VARCHAR(100)
-)
-BEGIN
-DECLARE t_autor VARCHAR(100);
-SET t_autor = TRIM(p_autor);
-
-SELECT id_libro, titulo, anio_publicacion
-    FROM Libros
-    WHERE autor = t_autor;
-
-END //
-DELIMITER ;
-
-CALL autor('Gabriel García Márquez');
-
-2.- Crea un SP que muestre los alumnos de un grado en particulas, utiliza IN para mandar el 
-y verificar si el grado esta vacio, si lo esta, entonces que muestre un erro en pantalla.
-
-DELIMITER //
-CREATE PROCEDURE alumnosGrado(
-IN p_grado VARCHAR(50)
-)
-BEGIN
- IF p_grado IS NULL OR TRIM(p_grado) = '' THEN
-    SELECT 'ERROR: No mandaste el parametro' AS Error;
-
-    ELSE
-    SELECT matricula, nombre FROM Alumnos
-        WHERE grado = p_grado;
-END IF;
-
-END // 
-DELIMITER ;
-
-
-CALL alumnosGrado('3° Secundaria');
-
-
-
+-- 3. Análisis del plan de ejecución
+EXPLAIN SELECT * FROM Prestamos 
+WHERE matricula = 1005;
                 </pre>
             </div>
         </section>
@@ -190,13 +100,9 @@ CALL alumnosGrado('3° Secundaria');
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-lightbulb"></i> 5. Conclusiones</h2>
             <div class="content-box">
-                <p><strong>Aprendizaje:</strong> Hay maneras de hacer consultar mucho mas eficazmente pero hay que ser
-                    muy selectivos en cuando y que contextos aplicar indices que a fin de cuentas son recursos gastados.
-                </p>
-                <p><strong>Problemas y Soluciones:</strong> Al comienzo me equivoque nombrando al indice, no era
-                    referencial, pero por eso mismo aprendi a cambiarles el nombre.</p>
-                <p><strong>Mejoras Futuras:</strong> Analizar mejor los contextos en los que conviene usar indices y
-                    cuando no.</p>
+                <p><strong>Aprendizaje:</strong> Aprendí que los índices no son gratuitos; ocupan espacio en disco y ralentizan las inserciones porque el árbol B debe rebalancearse cada vez que entran datos nuevos. La decisión de indexar debe basarse en métricas de lectura vs. escritura.</p>
+                <p><strong>Problemas y Soluciones:</strong> Intenté crear un índice sobre una columna de texto muy larga, lo que no era eficiente. La solución fue indexar solo los primeros caracteres (Prefijo) o reconsiderar si esa columna realmente se usaba en cláusulas `WHERE`.</p>
+                <p><strong>Mejoras Futuras:</strong> Investigar índices tipo HASH para comparaciones de igualdad exactas y FULLTEXT para búsquedas complejas dentro de textos largos.</p>
             </div>
         </section>
 
@@ -204,9 +110,8 @@ CALL alumnosGrado('3° Secundaria');
             <h2 class="section-title"><i class="fas fa-quote-right"></i> 6. Referencias</h2>
             <div class="content-box">
                 <ul class="references-list">
-                    <li>Clase de Bases de Datos Avanzadas (2026). <em>UDEM</em>.</li>
-                    <li>Castañeda, R. (2023, 10 de mayo). Tutorial de índices de SQL Server para principiantes.
-                        DataCamp. <em>https://www.datacamp.com/es/tutorial/sql-server-index</em>.</li>
+                    <li>DataCamp. (2023). <em>SQL Server Indexing for Beginners</em>.</li>
+                    <li>High Performance MySQL. (O'Reilly). <em>Indexing Strategies</em>.</li>
                 </ul>
             </div>
         </section>

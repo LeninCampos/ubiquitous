@@ -35,7 +35,7 @@
                 <span class="tag">Semana 4</span>
                 <span class="tag">Sesión 2</span>
             </div>
-            <h1>Las tres fases de la normalizacion en bases de datos SQL</h1>
+            <h1>Las tres fases de la normalización</h1>
             <p class="subtitle">Fecha: 6 de Febrero, 2026</p>
         </div>
     </header>
@@ -45,21 +45,20 @@
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-bullseye"></i> 1. Objetivo y Contexto</h2>
             <div class="content-box">
-                <p><strong>Objetivo:</strong> Comprender la normalizacion como buena practica en la creacion y manipulacion de las bases de datos. Sus 3 diferentes fases y la funcion y categoria de cada una de estas</p>
-                <p><strong>Contexto:</strong> Previo a llegar a una base de datos, un sistema de almacenamiento de datos debe estar normalizado para optimizar su previa implementacion en el dbms.</p>
+                <p><strong>Objetivo:</strong> Aplicar el proceso teórico de normalización a un conjunto de datos desestructurado ("sábana de datos") para convertirlo en un esquema relacional optimizado. El fin es eliminar redundancias y prevenir anomalías de inserción, actualización y borrado.</p>
+                <p><strong>Contexto:</strong> En el mundo real, los datos suelen llegar en formatos planos (Excel, CSV) no normalizados. Diseñar una base de datos eficiente requiere descomponer estos datos en tablas lógicas conectadas por llaves foráneas antes de escribir una sola línea de código SQL.</p>
             </div>
         </section>
 
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-book"></i> 2. Conceptos y Profundización</h2>
             <div class="content-box">
-                <p></p>
+                <p>La normalización se basa en reglas formales llamadas "Formas Normales" (FN):</p>
                 <ul>
-                    <li><strong>Normalizacion:</strong> La normalización de bases de datos es un proceso de diseño de bases de datos que organiza los datos en estructuras de tablas específicas. Ayuda a mejorar la integridad de los datos, prevenir anomalías en los datos, minimizar la redundancia de datos y reforzar el rendimiento de las consultas.</li>
-                    <li><strong>Primera fase normal:</strong> La primera forma normal, el criterio de normalización de bases de datos más básico, requiere que un esquema de tabla de base de datos incluya una clave principal y excluya la repetición entre columnas.</li>
-                    <li><strong>Segunda forma normal:</strong> ningún atributo que no sea clave tiene una dependencia parcial de la clave principal en la tabla. En otras palabras, si una clave principal es una clave compuesta, el atributo que no es clave debe depender de cada columna de esa clave compuesta.</li>
-                    <li><strong>Tercera forma normal:</strong> Una tabla en tercera forma normal satisface tanto la primera como la segunda forma normal, al tiempo que evita situaciones en las que los atributos no clave dependen de otros atributos no clave en lugar de claves primarias. Cuando los atributos que no son clave dependen de otros atributos que no son clave, esto se conoce como dependencia transitiva, una violación de la tercera forma normal.</li>
-                    <li>IBM(s.f.)</li>
+                    <li><strong>Primera Forma Normal (1FN):</strong> Exige atomicidad. Cada celda debe contener un único valor y no debe haber grupos repetidos de columnas. Se identifica una llave primaria.</li>
+                    <li><strong>Segunda Forma Normal (2FN):</strong> Se basa en la dependencia funcional total. Elimina las dependencias parciales; es decir, todos los atributos que no son llave deben depender de la <em>totalidad</em> de la llave primaria (crucial en llaves compuestas).</li>
+                    <li><strong>Tercera Forma Normal (3FN):</strong> Elimina las dependencias transitivas. Ningún atributo no-llave debe depender de otro atributo no-llave. "La llave, toda la llave y nada más que la llave".</li>
+                    <li><strong>Anomalías:</strong> Sin normalización, borrar un pedido podría borrar accidentalmente la información del cliente (anomalía de borrado), o actualizar la dirección de un cliente requeriría cambios en múltiples filas (anomalía de actualización).</li>
                 </ul>
             </div>
         </section>
@@ -67,78 +66,39 @@
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-desktop"></i> 3. Evidencia de Ejecución</h2>
             <div class="content-box">
-                <p>Captura de pantalla mostrando la compilación y ejecución:</p>
+                <p>Evolución del esquema de datos:</p>
 
                 <figure class="screenshot-container">
-                    <img src="img/21.png" alt="Screenshot de la terminal">
-                    <figcaption>Fig 1. Tabla original.</figcaption>
+                    <img src="img/21.png" alt="Tabla Original">
+                    <figcaption>Fig 1. Datos sin normalizar (redundancia visible en clientes y artículos).</figcaption>
                 </figure>
                 <figure class="screenshot-container">
-                    <img src="img/22.png" alt="Screenshot de la terminal">
-                    <figcaption>Fig 2. Tabla en primera fase de normalizacion.</figcaption>
+                    <img src="img/23.png" alt="2FN">
+                    <figcaption>Fig 2. Aplicación de 2FN: Separación de Artículos y Órdenes.</figcaption>
                 </figure>
                 <figure class="screenshot-container">
-                    <img src="img/23.png" alt="Screenshot de la terminal">
-                    <figcaption>Fig 3. Tabla en segunda fase de normalizacion.</figcaption>
-                </figure>
-                <figure class="screenshot-container">
-                    <img src="img/24.png" alt="Screenshot de la terminal">
-                    <figcaption>Fig 4. Tabla en tercera fase de normalizacion.</figcaption>
-                </figure>
-                <figure class="screenshot-container">
-                    <img src="img/25.png" alt="Screenshot de la terminal">
-                    <figcaption>Fig 5. Diagrama final de la tabla.</figcaption>
+                    <img src="img/25.png" alt="Modelo ER Final">
+                    <figcaption>Fig 3. Esquema final en 3FN con tablas catálogo (Estados, Clientes, Artículos).</figcaption>
                 </figure>
             </div>
         </section>
 
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-box-open"></i> 4. Entregables</h2>
-            <div class="download-card">
-                <div class="download-info">
-                    <h3><i class="fas fa-file-archive"></i> Paquete de Código</h3>
-                    <p>Incluye README con instrucciones.</p>
-                </div>
-                <a href="files/viernes.zip" class="btn-download" download>
-                    <i class="fas fa-download"></i> Descargar ZIP
-                </a>
-            </div>
             <div class="readme-preview">
-                <h4>Instrucciones rápidas:</h4>
+                <h4>Esquema SQL Resultante (DDL):</h4>
                 <pre class="cmd-preview">
-GRANT ALL PRIVILEGES ON tienda.* TO tienda_user_user @localhost IDENTIFIED BY FLUSH PRIVILEGES;  
-
-USE tienda;
-
-CREATE TABLE articulos(
-    num_item int(20) primary key,
-    desc_item varchar(100) not null,
-    precio float(10, 2) not null,
-);
-
-CREATE TABLE estados(
-    id_estado int primary key auto_increment,
-    estado char(150) not null
-);
-
 CREATE TABLE clientes(
     id_cliente int primary key,
     nom_cliente varchar(100),
     id_estado int not null,
-    FOREIGN KEY(id_estado) REFERENCES estados (id_estado)
-);
-
-CREATE TABLE ordenes(
-    id_orden int primary key,
-    fecha date not null,
-    id_cliente int not null,
-    FOREIGN KEY(id_cliente) REFERENCES clientes(id_cliente)
+    FOREIGN KEY(id_estado) REFERENCES estados(id_estado)
 );
 
 CREATE TABLE articulos_ordenes(
     id_orden int not null,
     num_item int not null,
-    PRIMARY KEY(id_orden, num_item),
+    PRIMARY KEY(id_orden, num_item), -- Llave compuesta
     FOREIGN KEY(id_orden) REFERENCES ordenes(id_orden),
     FOREIGN KEY(num_item) REFERENCES articulos(num_item)
 );
@@ -149,9 +109,9 @@ CREATE TABLE articulos_ordenes(
         <section class="report-section">
             <h2 class="section-title"><i class="fas fa-lightbulb"></i> 5. Conclusiones</h2>
             <div class="content-box">
-                <p><strong>Aprendizaje:</strong> Antes de programar cualqueir tabla, es importante normalizar para hacer todo más eficaz y funcinal.</p>
-                <p><strong>Problemas y Soluciones:</strong> Convertir correctamente las tablas, sin dejar pasar detalles</p>
-                <p><strong>Mejoras Futuras:</strong> Practicar para diferenciar mejor entre las 3 fases</p>
+                <p><strong>Aprendizaje:</strong> La normalización no es solo teoría académica; es vital para la integridad de los datos. Aprendí que una llave primaria compuesta (`id_orden`, `num_item`) es necesaria para resolver relaciones de muchos a muchos en tablas de detalle.</p>
+                <p><strong>Problemas y Soluciones:</strong> Identificar las dependencias transitivas fue complejo (ej. Estado dependiendo de Cliente). La solución fue crear tablas "catálogo" separadas para evitar repetir textos como "California" o "Wisconsin" múltiples veces.</p>
+                <p><strong>Mejoras Futuras:</strong> Analizar casos donde la des-normalización sea necesaria por rendimiento (ej. Data Warehousing), entendiendo el costo-beneficio.</p>
             </div>
         </section>
 
@@ -159,8 +119,8 @@ CREATE TABLE articulos_ordenes(
             <h2 class="section-title"><i class="fas fa-quote-right"></i> 6. Referencias</h2>
             <div class="content-box">
                 <ul class="references-list">
-                    <li>Clase de Bases de Datos Avanzadas (2026). <em>UDEM</em>.</li>
-                    <li>IBM. (s. f.). ¿Qué es la normalización de bases de datos? Think Topics. <em>https://www.ibm.com/mx-es/think/topics/database-normalization</em>.</li>
+                    <li>Codd, E. F. (1970). <em>A Relational Model of Data for Large Shared Data Banks</em>.</li>
+                    <li>IBM Cloud Education. (2025). <em>Database Normalization explained</em>.</li>
                 </ul>
             </div>
         </section>
